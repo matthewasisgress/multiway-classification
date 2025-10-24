@@ -1,6 +1,8 @@
 # multiway-classification
 Application of the R package **cpfa** to the MNIST dataset. 
 
+Author: Matthew Asisgress
+
 ## License
 
 This project is dual-licensed. All R code, including the `mcrd.Rmd` source file, 

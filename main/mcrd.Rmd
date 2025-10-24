@@ -11,11 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # MNIST
 
-Describe the dataset.
-
 ## Download
-
-Describe downloading the dataset.
 
 ```{r}
 # load library
@@ -38,8 +34,6 @@ y <- y0[ind]
 ```
 
 ## Analysis
-
-Conduct an analysis of the MNIST dataset using R package **cpfa**.
 
 ```{r}
 # load library
@@ -66,7 +60,7 @@ const <- c("uncons", "uncons", "uncons")
 outputR <- cpfa(x = X, y = y, model = model, nfac = 3, nrep = 5, 
                 ratio = 0.9, nfolds = nfolds, method = method, family = family, 
                 parameters = parameters, cmode = 1, type.out = "descriptives", 
-                seeds = NULL, plot.out = TRUE, parallel = TRUE, const = const, 
+                seeds = NULL, plot.out = TRUE, parallel = FALSE, const = const, 
                 nstart = nstart)
 
 ```
@@ -74,8 +68,6 @@ outputR <- cpfa(x = X, y = y, model = model, nfac = 3, nrep = 5,
 ## Results
 
 ### Classification Metrics
-
-Describe classification metrics.
 
 ```{r}
 # examine classification performance measures - median across train-test splits
@@ -85,11 +77,7 @@ outputR$descriptive$median[, 1:2]
 outputR$mean.opt.tune
 ```
 
-Discuss results for metrics.
-
 ### Plots
-
-Describe plots to be produced.
 
 ```{r pressure, echo=FALSE}
 # set seed
@@ -99,4 +87,4 @@ set.seed(500)
 results <- plotcpfa(outputR, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
-Describe the specific output.
+(note: this work is in progress with more updates anticipated in November 2025)

@@ -1,0 +1,102 @@
+---
+title: "Multiway Classification with Real Data"
+author: "Matthew Asisgress"
+date: "2025-10-24"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# MNIST
+
+Describe the dataset.
+
+## Download
+
+Describe downloading the dataset.
+
+```{r}
+# load library
+library(dslabs)
+
+# download MNIST data and subset training set to digits of 2 or 3
+mnist <- read_mnist()
+inde <- which(mnist$train$labels %in% c(2, 3))
+images <- mnist$train$images[inde, ]
+labels <- mnist$train$labels[inde]
+
+# restructure data into a three-way array and prepare labels
+X0 <- array(images, c(nrow(images), 28, 28))
+y0 <- as.factor(labels - 2)
+
+# subset to first 300 observations
+ind <- 1:3e2
+X <- X0[ind, , ]
+y <- y0[ind]
+```
+
+## Analysis
+
+Conduct an analysis of the MNIST dataset using R package **cpfa**.
+
+```{r}
+# load library
+library(cpfa)
+
+# set seed
+set.seed(500)
+
+# initialize alpha, number of trees, and node size for PLR and RF
+alpha <- seq(0, 1, length = 8)
+ntree <- c(400, 600, 800, 1000)
+nodesize <- c(4, 8, 16, 32)
+parameters <- list(alpha = alpha, ntree = ntree, nodesize = nodesize)
+
+# initialize inputs
+method <- c("PLR", "RF")
+family <- "binomial"
+model <- "parafac"
+nfolds <- 10
+nstart <- 10
+const <- c("uncons", "uncons", "uncons")
+
+# implement train-test splits with inner k-fold CV to optimize classification
+outputR <- cpfa(x = X, y = y, model = model, nfac = 3, nrep = 5, 
+                ratio = 0.9, nfolds = nfolds, method = method, family = family, 
+                parameters = parameters, cmode = 1, type.out = "descriptives", 
+                seeds = NULL, plot.out = TRUE, parallel = TRUE, const = const, 
+                nstart = nstart)
+
+```
+
+## Results
+
+### Classification Metrics
+
+Describe classification metrics.
+
+```{r}
+# examine classification performance measures - median across train-test splits
+outputR$descriptive$median[, 1:2]
+
+# examine optimal tuning parameters averaged across train-test splits
+outputR$mean.opt.tune
+```
+
+Discuss results for metrics.
+
+### Plots
+
+Describe plots to be produced.
+
+```{r pressure, echo=FALSE}
+# set seed
+set.seed(500)
+
+# plot heatmaps of component weights for optimal model
+results <- plotcpfa(outputR, nstart = 10, ctol = 1e-6, verbose = FALSE)
+```
+
+Describe the specific output.

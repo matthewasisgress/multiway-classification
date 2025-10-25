@@ -1,5 +1,6 @@
 # multiway-classification
-Application of the R package **cpfa** to the MNIST dataset. 
+Application of the R package **cpfa** to the MNIST dataset. A brief 
+demonstration of multiway classification with real data.
 
 Author: Matthew Asisgress
 
@@ -16,7 +17,9 @@ license.
 This project uses the R programming language (R Core Team, 2025). In addition, 
 this project uses two R packages found on The Comprehensive R Archive Network 
 (i.e., CRAN) including: **cpfa** (Asisgress, 2025) and **dslabs** 
-(Irizarry and Gill, 2025).
+(Irizarry and Gill, 2025). Note that the R package **cpfa** depends
+upon the R package **mulitway** (Helwig, 2025), which itself depends on the R 
+package **CMLS** (Helwig, 2025).
 
 ## Data
 
@@ -31,6 +34,12 @@ here: <https://creativecommons.org/licenses/by-sa/3.0/deed.en>.
 
 Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
 R package version 1.2-2, <https://CRAN.R-project.org/package=cpfa>.
+
+Helwig, N. (2025). CMLS: Constrained Multivariate Least Squares.
+R package version 1.1, <https://CRAN.R-project.org/package=CMLS>.
+
+Helwig, N. (2025). multiway: Component Models for Multi-Way Data. 
+R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
 R package version 0.9.0, <https://CRAN.R-project.org/package=dslabs>.

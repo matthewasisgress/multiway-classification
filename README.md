@@ -24,7 +24,7 @@ package **CMLS** (Helwig, 2025).
 ## Data
 
 This application uses the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
-et al., 1998), which is automatically downloaded when the R Markdown file is 
+et al., 2002), which is automatically downloaded when the R Markdown file is 
 run. Yann LeCun and Corinna Cortes hold the copyright of the MNIST dataset, 
 which is a derivative work from original NIST datasets. The MNIST dataset is 
 made available under the terms of the CC BY-SA 3.0 license, which can be viewed 
@@ -44,7 +44,7 @@ R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
 R package version 0.9.0, <https://CRAN.R-project.org/package=dslabs>.
 
-LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (1998). Gradient-based 
+LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (2002). Gradient-based 
 learning applied to document recognition. Proceedings of the IEEE, 86(11), 
 2278–2324. <https://doi.org/10.1109/5.726791>.
 

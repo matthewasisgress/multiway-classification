@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 In this demonstration, we apply the R package **cpfa** (Asisgress, 2025) to the 
-MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun et al., 1998). We show how 
+MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun et al., 2002). We show how 
 to use the package to distinguish between the digits of 2 and 3, a binary
 classification problem.
 
@@ -171,9 +171,9 @@ R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
 R package version 0.9.0, <https://CRAN.R-project.org/package=dslabs>.
 
-LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (1998). Gradient-based 
+LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (2002). Gradient-based 
 learning applied to document recognition. Proceedings of the IEEE, 86(11), 
-2278–2324. <https://doi.org/10.1109/5.726791>.
+2278–2324.
 
 LeCun, Y., Cortes, C., and Burges, C. (1998). The MNIST database of handwritten 
 digits. <http://yann.lecun.com/exdb/mnist/>.

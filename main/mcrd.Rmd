@@ -18,8 +18,8 @@ classification problem.
 
 The MNIST dataset consists of 70,000 grayscale images of handwritten digits from 
 0 to 9. We use the R package **dslabs** (Irizarry and Gill, 2025) to download 
-the dataset. We subset to only 1000 images from the original training set. The
-images include 495 images of the digit 2 and 505 images of the digit 3.
+the dataset. We subset to only 2000 images from the original training set. The
+images include 980 images of the digit 2 and 1020 images of the digit 3.
 
 ## Download
 
@@ -37,8 +37,8 @@ labels <- mnist$train$labels[inde]
 X0 <- array(images, c(nrow(images), 28, 28))
 y0 <- as.factor(as.numeric(as.factor(labels)) - 1)
 
-# subset to first 1000 images
-ind <- 1:1e3
+# subset to first 2000 images
+ind <- 1:2e3
 X <- X0[ind, , ]
 y <- y0[ind]
 ```
@@ -77,7 +77,7 @@ specify that the classification mode is the first mode of the input array (i.e.,
 the mode connected to the class labels).
 
 We next initialize classification methods. First, we use 
-`method = c("PLR", "RF)` to employ penalized logistic regression (PLR) and 
+`method = c("PLR", "RF")` to employ penalized logistic regression (PLR) and 
 random forest (RF) classifiers for this problem. See `help(cpfa)` for other 
 options and for references associated with these classifiers. Second, we specify 
 that the problem is a binary classification problem by setting 
@@ -141,13 +141,21 @@ outputR$descriptive$median[, 1:2]
 outputR$mean.opt.tune
 ```
 
-We can see average optimal tuning parameters for each classifier. Note that PLR
-optimized lambda internally.
+Using 2000 images, we can see that classification accuracy values are close to 
+0.9 for both two-component and three-component models. The two-component Parafac
+model with the RF classifier performed best. In addition, we can see average 
+optimal tuning parameters for each classifier. Note that PLR optimized lambda 
+internally.
 
-Next, we use the function `plotcpfa` to plot the component weights for the A and
-B modes of the data array. 
-
-(unfinished, updates planned in November 2025)
+Next, we use the function `plotcpfa`. The function does two things: (1) it fits
+the optimal model among those fit using function `cpfa`; and (2) it plots the 
+component weights from the non-classification modes. Note that, for the Parafac2
+model, the function does not plot A mode weights as these are allowed to vary
+within each level of the classification mode. From the component weights, we can
+search for relationships between the levels of mode A or B and the model 
+components. In this case, mode A corresponds to the horizontal axis of the 
+images (when viewing the images as those above) while mode B corresponds to the
+vertical axis of the images.
 
 ```{r}
 # set seed
@@ -156,6 +164,22 @@ set.seed(500)
 # plot heatmaps of component weights for optimal model
 results <- plotcpfa(outputR, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
+
+Examining the first component for the A mode (horizontal), weights are stronger
+between levels 5-24. Looking at the B mode (vertical), a similar pattern is 
+seen: weights are stronger in the middle between levels 4-25. Then, whether 
+viewed from the A mode or B mode perspective, this first component appears to be 
+a general component showing the presence of non-zero values, distinguishing 
+empty outer parts of images from inner parts. Likely, the 2 and 3 digits have
+systematic differences in the presence of non-zero values in these areas.
+
+Examining the second component for the A mode, weights are stronger near and
+around level 14 where there appears to be a greater presence of zero values in 
+digit 3 compared to digit 2 near this level. A similar pattern is seen in the
+B mode around levels 18 and 19 with more non-zero values for 2, compared to 3,
+around these levels. Taken together between the modes, this component could be
+identifying the closed circle present in the digit 2, which differs from the 
+open or half circle seen in digit 3.
 
 # References
 
@@ -181,5 +205,3 @@ digits. <http://yann.lecun.com/exdb/mnist/>.
 R Core Team (2025). R: A Language and Environment for Statistical Computing. R 
 Foundation for Statistical Computing, Vienna, Austria. 
 <https://www.R-project.org/>.
-
-(unfinished, updates planned in November 2025)

@@ -1,7 +1,7 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2025-10-27"
+date: "2025-10-28"
 output: pdf_document
 ---
 
@@ -9,12 +9,18 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this demonstration, we apply R package **cpfa** (Asisgress, 2025) to the 
-MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun et al., 2002)---showing 
-how to use the package to distinguish between digits of 2 and 3, a binary
-classification problem. We further apply the package to the Fashion MNIST
-dataset (Xiao, Rasul, and Vollgraf, 2017)---distinguishing among images of tops, 
-trousers, and sandals, which is a multiclass classification problem.
+In this demonstration, we apply R package **cpfa** (Asisgress, 2025) to three 
+real datasets. First, we apply the package to the MNIST dataset (LeCun, Cortes, 
+and Burges, 1998; LeCun et al., 2002)---showing how to use the package to 
+distinguish between digits of 2 and 3, a binary classification problem. We 
+further apply the package to the Fashion MNIST dataset (Xiao, Rasul, and 
+Vollgraf, 2017)---distinguishing among images of tops, trousers, and sandals, 
+which is a multiclass classification problem. Finally, we apply the package to 
+the VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST database (Yang 
+et al., 2023; Yang, Shi, Ni, 2021), which contains three-dimensional 
+representations of blood vessels. Specifically, we distinguish healthy blood 
+vessels from aneurysm blood vessels, which is a binary classification 
+problem.
 
 # A.) MNIST
 
@@ -40,7 +46,7 @@ X0 <- array(images, c(nrow(images), 28, 28))
 y0 <- as.factor(as.numeric(as.factor(labels)) - 1)
 
 # subset to first 2000 images
-ind <- 1:2e3 
+ind <- 1:2e3
 X <- X0[ind, , ]
 y <- y0[ind]
 ```
@@ -268,7 +274,7 @@ Next, we initialize classification methods. First, we use
 `method = c("SVM", "GBM")` to use support vector machine (SVM) and gradient 
 boosting machine (GBM). Second, we specify that the problem is 
 a multiclass classification problem by setting `family <- "multinomial"`. Third, 
-we use 10-fold cross-validation (CV) in our inner training, setting 
+we use 10-fold CV in our inner training, setting 
 `nfolds <- 10`; and fourth, we set `nrep <- 5` to perform five outer train-test 
 splits of our data. Fifth, we set `ratio <- 0.9` to specify that each outer 
 training set contains a proportion of 0.9 of the full data while the outer 
@@ -371,10 +377,161 @@ be done to explore the estimated A mode weights (or C mode weights) to
 understand the components from other perspectives. Such work could clarify the 
 components further and change the current interpretations.
 
+# C.) VesselMNIST3D from MedMNIST
+
+The VesselMNIST3D dataset consists of 1,908 three-dimensional models of brain 
+blood vessels based on reconstructed magnetic resonance images. Vessels exist
+in two categories: healthy vessels (indexed by 0) or aneurysm vessels (indexed
+by 1). We download the dataset manually from <https://medmnist.com/>, which 
+gives us a .npz file. We use the Python script entitled `convert_npz_to_h5.py`
+to convert VesselMNIST3D from a file format of .npz to .h5. This script can be
+found on this project's GitHub repository. Next, we use R package **rhdf5** 
+(Fischer, Smith, and Pau, 2025) to read the data (in .h5 file format) into R. 
+We subset to only 300 objects from the training set, including 150 healthy 
+vessels and 150 aneurysm vessels.
+
+## Download
+
+```{r, message = FALSE, warning = FALSE}
+# load library
+library(rhdf5)
+
+# import VesselMNIST3D data
+h5file <- "vesselmnist3d.h5"
+imag4d <- h5read(h5file, name = "train_images")
+labels <- h5read(h5file, name = "train_labels")
+
+# subset to first 300 objects
+ind <- 1:300
+Xp <- imag4d[ , , , ind]
+y <- as.factor(as.numeric(labels))[ind]
+
+# convert array to double
+storage.mode(Xp) <- "double"
+
+# remove full dataset
+rm(imag4d)
+```
+
+We use R package **plotly** (Sievert, 2020) to generate a point cloud 
+representation of a healthy blood vessel.
+
+```{r, message = FALSE, warning = FALSE}
+# load library
+library(plotly)
+
+# prepare data from vessel 205 for plotting
+voxel_df <- as.data.frame(which(Xp[, , , 205] > 0, arr.ind = TRUE))
+colnames(voxel_df) <- c("x", "y", "z")
+
+# generate 3D plot
+scene1 <- list(title = "", showticklabels = FALSE, showgrid = TRUE, 
+               showline = FALSE, zeroline = FALSE)
+plot_ly(voxel_df, x = ~x, y = ~y, z = ~z, type = "scatter3d", mode = "markers",
+        marker = list(size = 3.5, color = "blue", opacity = 0.3)) %>%
+          layout(title = "3D Blood Vessel Example - Point Cloud Representation", 
+                 scene = list(xaxis = scene1, yaxis = scene1, zaxis = scene1))
+```
+
+## Analysis
+
+We load R package **cpfa** and initialize the tensor model. First, the data 
+array is a regular four-way array; so we set `model <- "parafac"` to 
+use a Parafac model. Second, we initialize the number of components to fit by 
+setting `nfac <- c(2, 3)`. Third, we set `nstart <- 10` for 10 random starts. 
+Fourth, we specify the constraint for each mode using `const`. For Parafac, we 
+set the fourth mode to have non-negative weights.
+
+Next, we initialize classification methods. First, we use 
+`method = c("NN", "RDA")` to use feed-forward neural networks (NN) and 
+regularized discriminant analysis (RDA). Second, we specify that the problem is 
+a binary classification problem by setting `family <- "binomial"`. Third, 
+we use 10-fold CV in our inner training, setting `nfolds <- 10`; and fourth, we 
+set `nrep <- 5` to perform five outer train-test splits of our data. Fifth, we 
+set `ratio <- 0.9` to specify that each outer training set contains a proportion 
+of 0.9 of the full data while the outer testing set contains a proportion of 
+0.1. Finally, we specify ranges for tuning parameters alpha (RDA), delta (RDA), 
+size (NN), and decay (NN), wrapping them into `parameters`.
+
+```{r, message = FALSE, warning = FALSE}
+# load library
+library(cpfa)
+
+# set seed
+set.seed(500)
+
+# initialize model 
+model <- "parafac"
+nfac <- c(2, 3)
+nstart <- 10
+const <- c("uncons", "uncons", "uncons", "nonneg")
+
+# initialize classification
+method <- c("NN", "RDA")
+family <- "binomial"
+nfolds <- 10
+nrep <- 5
+ratio <- 0.9
+
+# initialize tuning parameters
+rda.alpha <- seq(0, 0.999, length = 4); delta <- c(0, 0.1, 1, 2)
+size <- c(1, 2, 4, 8); decay <- c(0.001, 0.01, 0.1, 1)
+parameters <- list(rda.alpha = rda.alpha, delta = delta, size = size, 
+                   decay = decay)
+
+# implement train-test splits with inner k-fold CV to optimize classification
+outputR3 <- cpfa(x = Xp, y = y, model = model, nfac = nfac, nstart = nstart,
+                const = const, method = method, family = family, 
+                nfolds = nfolds, nrep = nrep, ratio = ratio, 
+                parameters = parameters, type.out = "descriptives", 
+                seeds = NULL, plot.out = TRUE, parallel = FALSE, 
+                verbose = FALSE)
+```
+
+## Results
+
+We examine classification performance metrics of error (`err`) and overall
+accuracy (`acc`) for each model and for each classifier, averaged across 
+train-test splits. We also examine, averaged across train-test splits, the 
+optimal tuning parameters chosen for each classifier.
+
+```{r}
+# examine classification performance measures - mean across train-test splits
+outputR3$descriptive$mean[, 1:2]
+
+# examine optimal tuning parameters averaged across train-test splits
+outputR3$mean.opt.tune
+```
+
+We see that accuracy values are between 0.65 and 0.71. The three-component 
+Parafac model with the RDA classifier performed best. In addition, we can see 
+average optimal tuning parameters for each classifier. 
+
+Next, we use function `plotcpfa`. Looking at the plots, we can search for 
+relationships between the levels of mode A, B, or C and the model components. In 
+this case, the three modes correspond to the three dimensions of the vessels.
+
+```{r}
+# set seed
+set.seed(500)
+
+# plot heatmaps of component weights for optimal model
+results3 <- plotcpfa(outputR3, nstart = 10, ctol = 1e-6, verbose = FALSE)
+```
+
+For now, we omit interpretations of the three components, given the difficulty 
+of visualizing each blood vessel object. For more information about this dataset
+and classification work using it, interested parties might consider exploring 
+Yang, Xia, Kin, and Igarashi (2020); Yang et al. (2023); and Yang, Shi, and Ni 
+(2021).
+
 # References
 
 Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
 R package version 1.2-2, <https://CRAN.R-project.org/package=cpfa>.
+
+Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to HDF5. 
+R package version 2.52.1, <https://bioconductor.org/packages/rhdf5>.
 
 Harshman, R. (1970). Foundations of the PARAFAC procedure: Models and conditions 
 for an “explanatory” multi-modal factor analysis. UCLA working papers in 
@@ -413,6 +570,21 @@ R Core Team (2025). R: A Language and Environment for Statistical Computing. R
 Foundation for Statistical Computing, Vienna, Austria. 
 <https://www.R-project.org/>.
 
+Sievert, C. (2020). Interactive web-based data visualization with R, plotly, 
+and shiny. Chapman and Hall/CRC.
+
 Xiao, H., Rasul, K., and Vollgraf, R. (2017). Fashion-mnist: a novel image 
 dataset for benchmarking machine learning algorithms. arXiv preprint 
 arXiv:1708.07747.
+
+Yang, J., Shi, R., and Ni, B. (April 2021). Medmnist classification decathlon: 
+A lightweight automl benchmark for medical image analysis. In 2021 IEEE 18th 
+International Symposium on Biomedical Imaging (ISBI) (pp. 191-195). IEEE.
+
+Yang, J., Shi, R., Wei, D., Liu, Z., Zhao, L., Ke, B., ... and Ni, B. (2023). 
+Medmnist v2-a large-scale lightweight benchmark for 2d and 3d biomedical image 
+classification. Scientific Data, 10(1), 41.
+
+Yang, X., Xia, D., Kin, T., and Igarashi, T. (2020). Intra: 3d intracranial 
+aneurysm dataset for deep learning. In Proceedings of the IEEE/CVF conference 
+on computer vision and pattern recognition (pp. 2656-2666).

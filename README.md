@@ -1,43 +1,59 @@
 # multiway-classification
-Application of the R package **cpfa** to the MNIST and Fashion MNIST datasets. A 
-demonstration of multiway classification with real data.
+Application of the R package **cpfa** to three real datasets.
 
 Author: Matthew Asisgress
 
 ## License
 
-This project is dual-licensed. R code, including the `mcrd.Rmd` source file, 
-is licensed under the MIT license. See the `LICENSE` file for details. The 
-generated report (`mcrd.pdf`), as a derivative work of the MNIST dataset, is 
-licensed under the Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) 
-license.
+This project is dual-licensed. All code, including the `mcrd.Rmd` source file 
+and the `convert_npz_to_h5.py` file, is licensed under the MIT license. See the 
+`LICENSE` file for details. The generated report (`mcrd.pdf`), as a derivative 
+work of the MNIST dataset, is licensed under the Creative Commons 
+Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 
 ## R packages
 
 This project uses the R programming language (R Core Team, 2025). In addition, 
-this project uses three R packages found on The Comprehensive R Archive Network 
+this project uses five R packages found on The Comprehensive R Archive Network 
 (i.e., CRAN) including: **cpfa** (Asisgress, 2025), **dslabs** (Irizarry and 
-Gill, 2025), and **keras3** (Kalinowski, Allaire, and Chollet, 2025). Note that 
-R package **cpfa** depends on R package **mulitway** (Helwig, 2025), which 
-itself depends on R package **CMLS** (Helwig, 2025).
+Gill, 2025), **keras3** (Kalinowski, Allaire, and Chollet, 2025), **rhdf5** 
+(Fischer, Smith, and Pau, 2025), and **plotly** (Sievert, 2020). Note that R 
+package **cpfa** depends on R package **mulitway** (Helwig, 2025), which itself 
+depends on R package **CMLS** (Helwig, 2025).
 
 ## Data
 
-This project uses the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
-et al., 2002). Yann LeCun and Corinna Cortes hold the copyright of the MNIST 
-dataset, which is a derivative work from original NIST datasets. The MNIST 
-dataset is made available under the terms of the CC BY-SA 3.0 license, which can 
-be viewed here: <https://creativecommons.org/licenses/by-sa/3.0/deed.en>. 
-Moreover, this project uses the Fashion MNIST dataset (Xiao, Rasul, and 
-Vollgraf, 2017). Zalando SE holds the copyright for the Fashion MNIST dataset,
-and the associated MIT license for this dataset can be found at the end of this
-README. Note that both datasets are automatically downloaded when `mcrd.Rmd` 
-runs.
+This project uses three datasets. First, it uses the MNIST dataset (LeCun, 
+Cortes, and Burges, 1998; LeCun et al., 2002). Yann LeCun and Corinna Cortes 
+hold the copyright of the MNIST dataset, which is a derivative work from 
+original NIST datasets. The MNIST dataset is made available under the terms of 
+the CC BY-SA 3.0 license, which can be viewed here: 
+<https://creativecommons.org/licenses/by-sa/3.0/deed.en>. Moreover, this project 
+uses the Fashion MNIST dataset (Xiao, Rasul, and Vollgraf, 2017). Zalando SE 
+holds the copyright for the Fashion MNIST dataset, and the associated MIT 
+license for this dataset can be found at the end of this README. Finally, this
+project uses the VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST 
+database (Yang et al., 2023; Yang, Shi, Ni, 2021). VesselMNIST3D is made 
+available under the terms of the Creative Commons Attribution 4.0 International 
+(CC BY 4.0) license, which can be viewed here:
+<https://creativecommons.org/licenses/by/4.0/deed.en>. 
+
+MNIST and Fashion MNIST are automatically downloaded when `mcrd.Rmd` runs. 
+VesselMNIST3D is provided in the project GitHub repository in both its 
+original .npz file format and an .h5 file format. The Python script entitled 
+'convert_npz_to_h5.py' was used to convert VesselMNIST3D from .npz to .h5. This
+Python script is made available in the project repository. When the `mcrd.Rmd` 
+file runs, it subsets any given dataset, builds a classification rule between 
+data and class labels, and provides summaries of these analyses. Results can be 
+viewed within the output file `mcrd.pdf`.
 
 ## References
 
 Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
 R package version 1.2-2, <https://CRAN.R-project.org/package=cpfa>.
+
+Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to HDF5. 
+R package version 2.52.1, <https://bioconductor.org/packages/rhdf5>.
 
 Helwig, N. (2025). CMLS: Constrained Multivariate Least Squares.
 R package version 1.1, <https://CRAN.R-project.org/package=CMLS>.
@@ -62,9 +78,24 @@ R Core Team (2025). R: A Language and Environment for Statistical Computing. R
 Foundation for Statistical Computing, Vienna, Austria. 
 <https://www.R-project.org/>.
 
+Sievert, C. (2020). Interactive web-based data visualization with R, plotly, 
+and shiny. Chapman and Hall/CRC.
+
 Xiao, H., Rasul, K., and Vollgraf, R. (2017). Fashion-mnist: a novel image 
 dataset for benchmarking machine learning algorithms. arXiv preprint 
 arXiv:1708.07747.
+
+Yang, J., Shi, R., and Ni, B. (April 2021). Medmnist classification decathlon: 
+A lightweight automl benchmark for medical image analysis. In 2021 IEEE 18th 
+International Symposium on Biomedical Imaging (ISBI) (pp. 191-195). IEEE.
+
+Yang, J., Shi, R., Wei, D., Liu, Z., Zhao, L., Ke, B., ... and Ni, B. (2023). 
+Medmnist v2-a large-scale lightweight benchmark for 2d and 3d biomedical image 
+classification. Scientific Data, 10(1), 41.
+
+Yang, X., Xia, D., Kin, T., and Igarashi, T. (2020). Intra: 3d intracranial 
+aneurysm dataset for deep learning. In Proceedings of the IEEE/CVF conference 
+on computer vision and pattern recognition (pp. 2656-2666).
 
 ## Fashion MNIST License
 

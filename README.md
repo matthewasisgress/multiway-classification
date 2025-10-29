@@ -7,9 +7,9 @@ Author: Matthew Asisgress
 
 This project is dual-licensed. All code, including the `mcrd.Rmd` source file 
 and the `convert_npz_to_h5.py` file, is licensed under the MIT license. See the 
-`LICENSE` file for details. The generated report (`mcrd.pdf`), as a derivative 
-work of the MNIST dataset, is licensed under the Creative Commons 
-Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
+`LICENSE` file for details. The generated reports (`mcrd.pdf` and `mcrd.html`), 
+as derivative works of the MNIST dataset, are licensed under the Creative 
+Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 
 ## R packages
 
@@ -45,7 +45,7 @@ original .npz file format and an .h5 file format. The Python script entitled
 Python script is made available in the project repository. When the `mcrd.Rmd` 
 file runs, it subsets any given dataset, builds a classification rule between 
 data and class labels, and provides summaries of these analyses. Results can be 
-viewed within the output file `mcrd.pdf`.
+viewed within the output files `mcrd.pdf` or `mcrd.html`.
 
 ## References
 

@@ -3,6 +3,23 @@ Application of the R package **cpfa** to three real datasets.
 
 Author: Matthew Asisgress
 
+Package URL: <https://CRAN.R-project.org/package=cpfa>.
+
+## Overview
+
+We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
+apply the package to the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
+et al., 2002)---showing how to use the package to distinguish between digits of 
+2 and 3, a binary classification problem. We further apply the package to the 
+Fashion MNIST dataset (Xiao, Rasul, and Vollgraf, 2017)---distinguishing among 
+images of tops, trousers, and sandals, which is a multiclass classification 
+problem. Finally, we apply the package to the VesselMNIST3D dataset (Yang et 
+al., 2020) from the MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021), 
+which contains three-dimensional representations of blood vessels. Specifically, 
+we distinguish healthy blood vessels from aneurysm blood vessels. The source 
+file `mcrd.Rmd` contains original text and code, and the reports `mcrd.pdf` and 
+`mcrd.html` contain results.
+
 ## License
 
 This project is dual-licensed. All code, including the `mcrd.Rmd` source file 

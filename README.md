@@ -10,7 +10,7 @@ Package URL: <https://CRAN.R-project.org/package=cpfa>.
 We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
 apply the package to the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
 et al., 2002)---showing how to use the package to distinguish between digits of 
-2 and 3, a binary classification problem. We further apply the package to the 
+2 and 3, a binary classification problem. Next, we apply the package to the 
 Fashion MNIST dataset (Xiao, Rasul, and Vollgraf, 2017)---distinguishing among 
 images of tops, trousers, and sandals, which is a multiclass classification 
 problem. Finally, we apply the package to the VesselMNIST3D dataset (Yang et 
@@ -36,13 +36,13 @@ this project uses five R packages found on The Comprehensive R Archive Network
 Gill, 2025), **keras3** (Kalinowski, Allaire, and Chollet, 2025), **rhdf5** 
 (Fischer, Smith, and Pau, 2025), and **plotly** (Sievert, 2020). Note that R 
 package **cpfa** depends on R package **mulitway** (Helwig, 2025), which itself 
-depends on R package **CMLS** (Helwig, 2025).
+depends on **CMLS** (Helwig, 2025).
 
 ## Data
 
 This project uses three datasets. First, it uses the MNIST dataset (LeCun, 
 Cortes, and Burges, 1998; LeCun et al., 2002). Yann LeCun and Corinna Cortes 
-hold the copyright of the MNIST dataset, which is a derivative work from 
+hold the copyright of the MNIST dataset, which is a derivative work from the
 original NIST datasets. The MNIST dataset is made available under the terms of 
 the CC BY-SA 3.0 license, which can be viewed here: 
 <https://creativecommons.org/licenses/by-sa/3.0/deed.en>. Moreover, this project 
@@ -57,12 +57,12 @@ available under the terms of the Creative Commons Attribution 4.0 International
 
 MNIST and Fashion MNIST are automatically downloaded when `mcrd.Rmd` runs. 
 VesselMNIST3D is provided in the project GitHub repository in both its 
-original .npz file format and an .h5 file format. The Python script entitled 
-'convert_npz_to_h5.py' was used to convert VesselMNIST3D from .npz to .h5. This
-Python script is made available in the project repository. When the `mcrd.Rmd` 
-file runs, it subsets any given dataset, builds a classification rule between 
-data and class labels, and provides summaries of these analyses. Results can be 
-viewed within the output files `mcrd.pdf` or `mcrd.html`.
+original .npz file format and an .h5 file format. The Python script
+'convert_npz_to_h5.py' was used to convert VesselMNIST3D from .npz to .h5. This 
+script is made available in the project repository. When `mcrd.Rmd` runs, it 
+subsets a given dataset, builds a classification rule between data and class 
+labels, and provides summaries of these analyses. Results can be viewed within 
+the output files `mcrd.pdf` or `mcrd.html`.
 
 ## References
 

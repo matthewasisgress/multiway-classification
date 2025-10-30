@@ -364,17 +364,16 @@ datasets.</p>
 real datasets. First, we apply the package to the MNIST dataset (LeCun,
 Cortes, and Burges, 1998; LeCun et al., 2002)—showing how to use the
 package to distinguish between digits of 2 and 3, a binary
-classification problem. We further apply the package to the Fashion
-MNIST dataset (Xiao, Rasul, and Vollgraf, 2017)—distinguishing among
-images of tops, trousers, and sandals, which is a multiclass
-classification problem. Finally, we apply the package to the
-VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST database
-(Yang et al., 2023; Yang, Shi, Ni, 2021), which contains
-three-dimensional representations of blood vessels. Specifically, we
-distinguish healthy blood vessels from aneurysm blood vessels. The
-source file <code>mcrd.Rmd</code> contains original text and code, and
-the reports <code>mcrd.pdf</code> and <code>mcrd.html</code> contain
-results.</p>
+classification problem. Next, we apply the package to the Fashion MNIST
+dataset (Xiao, Rasul, and Vollgraf, 2017)—distinguishing among images of
+tops, trousers, and sandals, which is a multiclass classification
+problem. Finally, we apply the package to the VesselMNIST3D dataset
+(Yang et al., 2020) from the MedMNIST database (Yang et al., 2023; Yang,
+Shi, Ni, 2021), which contains three-dimensional representations of
+blood vessels. Specifically, we distinguish healthy blood vessels from
+aneurysm blood vessels. The source file <code>mcrd.Rmd</code> contains
+original text and code, and the reports <code>mcrd.pdf</code> and
+<code>mcrd.html</code> contain results.</p>
 </div>
 <div id="license" class="section level2">
 <h2>License</h2>
@@ -396,16 +395,16 @@ Archive Network (i.e., CRAN) including: <strong>cpfa</strong>
 <strong>rhdf5</strong> (Fischer, Smith, and Pau, 2025), and
 <strong>plotly</strong> (Sievert, 2020). Note that R package
 <strong>cpfa</strong> depends on R package <strong>mulitway</strong>
-(Helwig, 2025), which itself depends on R package <strong>CMLS</strong>
-(Helwig, 2025).</p>
+(Helwig, 2025), which itself depends on <strong>CMLS</strong> (Helwig,
+2025).</p>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
 <p>This project uses three datasets. First, it uses the MNIST dataset
 (LeCun, Cortes, and Burges, 1998; LeCun et al., 2002). Yann LeCun and
 Corinna Cortes hold the copyright of the MNIST dataset, which is a
-derivative work from original NIST datasets. The MNIST dataset is made
-available under the terms of the CC BY-SA 3.0 license, which can be
+derivative work from the original NIST datasets. The MNIST dataset is
+made available under the terms of the CC BY-SA 3.0 license, which can be
 viewed here: <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" class="uri">https://creativecommons.org/licenses/by-sa/3.0/deed.en</a>.
 Moreover, this project uses the Fashion MNIST dataset (Xiao, Rasul, and
 Vollgraf, 2017). Zalando SE holds the copyright for the Fashion MNIST
@@ -418,13 +417,12 @@ license, which can be viewed here: <a href="https://creativecommons.org/licenses
 <p>MNIST and Fashion MNIST are automatically downloaded when
 <code>mcrd.Rmd</code> runs. VesselMNIST3D is provided in the project
 GitHub repository in both its original .npz file format and an .h5 file
-format. The Python script entitled ‘convert_npz_to_h5.py’ was used to
-convert VesselMNIST3D from .npz to .h5. This Python script is made
-available in the project repository. When the <code>mcrd.Rmd</code> file
-runs, it subsets any given dataset, builds a classification rule between
-data and class labels, and provides summaries of these analyses. Results
-can be viewed within the output files <code>mcrd.pdf</code> or
-<code>mcrd.html</code>.</p>
+format. The Python script ‘convert_npz_to_h5.py’ was used to convert
+VesselMNIST3D from .npz to .h5. This script is made available in the
+project repository. When <code>mcrd.Rmd</code> runs, it subsets a given
+dataset, builds a classification rule between data and class labels, and
+provides summaries of these analyses. Results can be viewed within the
+output files <code>mcrd.pdf</code> or <code>mcrd.html</code>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

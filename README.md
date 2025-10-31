@@ -8,61 +8,59 @@ Package URL: <https://CRAN.R-project.org/package=cpfa>.
 ## Overview
 
 We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
-apply the package to the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
-et al., 2002)---showing how to use the package to distinguish between digits of 
-2 and 3, a binary classification problem. Next, we apply the package to the 
-Fashion MNIST dataset (Xiao, Rasul, and Vollgraf, 2017)---distinguishing among 
-images of tops, trousers, and sandals, which is a multiclass classification 
-problem. Finally, we apply the package to the VesselMNIST3D dataset (Yang et 
-al., 2020) from the MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021), 
-which contains three-dimensional representations of blood vessels. Specifically, 
-we distinguish healthy blood vessels from aneurysm blood vessels. The source 
-file `mcrd.Rmd` contains original text and code, and the reports `mcrd.pdf` and 
-`mcrd.html` contain results.
+apply the package MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
+2002)---showing how the package can be used to distinguish between images of the
+digits 2 and 3. Next, we apply the package to Fashion MNIST (Xiao, Rasul, and 
+Vollgraf, 2017)---distinguishing among images of tops, trousers, and sandals. 
+Finally, we apply the package to VesselMNIST3D (Yang et al., 2020) from the 
+MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021). VesselMNIST3D 
+contains three-dimensional representations of blood vessels, and we distinguish 
+healthy blood vessels from aneurysm blood vessels. For this project, the source 
+file `mcrd.Rmd` contains original text and code used to produce the two reports 
+`mcrd.pdf` and `mcrd.html`, which both contain results.
 
 ## License
 
-This project is dual-licensed. All code, including the `mcrd.Rmd` source file 
-and the `convert_npz_to_h5.py` file, is licensed under the MIT license. See the 
-`LICENSE` file for details. The generated reports (`mcrd.pdf` and `mcrd.html`), 
-as derivative works of the MNIST dataset, are licensed under the Creative 
-Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
+This project is dual-licensed. All code and text, including the `mcrd.Rmd` 
+source file and the `convert_npz_to_h5.py` file, is licensed under the MIT 
+license. See the `LICENSE` file for details. Generated reports (`mcrd.pdf` and 
+`mcrd.html`), as derivative works of the MNIST dataset, are licensed under the 
+Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 
 ## R packages
 
 This project uses the R programming language (R Core Team, 2025). In addition, 
 this project uses five R packages found on The Comprehensive R Archive Network 
-(i.e., CRAN) including: **cpfa** (Asisgress, 2025), **dslabs** (Irizarry and 
-Gill, 2025), **keras3** (Kalinowski, Allaire, and Chollet, 2025), **rhdf5** 
+(CRAN) including: **cpfa** (Asisgress, 2025), **dslabs** (Irizarry and Gill, 
+2025), **keras3** (Kalinowski, Allaire, and Chollet, 2025), **rhdf5** 
 (Fischer, Smith, and Pau, 2025), and **plotly** (Sievert, 2020). Note that R 
 package **cpfa** depends on R package **mulitway** (Helwig, 2025), which itself 
 depends on **CMLS** (Helwig, 2025).
 
 ## Data
 
-This project uses three datasets. First, it uses the MNIST dataset (LeCun, 
-Cortes, and Burges, 1998; LeCun et al., 2002). Yann LeCun and Corinna Cortes 
-hold the copyright of the MNIST dataset, which is a derivative work from the
-original NIST datasets. The MNIST dataset is made available under the terms of 
-the CC BY-SA 3.0 license, which can be viewed here: 
+This project uses three datasets. First, it uses MNIST (LeCun, Cortes, and 
+Burges, 1998; LeCun et al., 2002). Yann LeCun and Corinna Cortes hold the 
+copyright of the MNIST dataset, which is a derivative work from the original 
+NIST datasets. MNIST is made available under the terms of the CC BY-SA 3.0 
+license, which can be viewed here: 
 <https://creativecommons.org/licenses/by-sa/3.0/deed.en>. Moreover, this project 
-uses the Fashion MNIST dataset (Xiao, Rasul, and Vollgraf, 2017). Zalando SE 
-holds the copyright for the Fashion MNIST dataset, and the associated MIT 
-license for this dataset can be found at the end of this README. Finally, this
-project uses the VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST 
-database (Yang et al., 2023; Yang, Shi, Ni, 2021). VesselMNIST3D is made 
-available under the terms of the Creative Commons Attribution 4.0 International 
-(CC BY 4.0) license, which can be viewed here:
-<https://creativecommons.org/licenses/by/4.0/deed.en>. 
+uses Fashion MNIST (Xiao, Rasul, and Vollgraf, 2017). Zalando SE holds the 
+copyright for Fashion MNIST, and the associated MIT license for this dataset can 
+be found at the end of this README. Finally, this project uses VesselMNIST3D 
+(Yang et al., 2020) from the MedMNIST database (Yang et al., 2023; Yang, Shi, 
+Ni, 2021). VesselMNIST3D is made available under the terms of the Creative 
+Commons Attribution 4.0 International (CC BY 4.0) license, which can be viewed 
+here: <https://creativecommons.org/licenses/by/4.0/deed.en>. 
 
-MNIST and Fashion MNIST are automatically downloaded when `mcrd.Rmd` runs. 
-VesselMNIST3D is provided in the project GitHub repository in both its 
-original .npz file format and an .h5 file format. The Python script
-'convert_npz_to_h5.py' was used to convert VesselMNIST3D from .npz to .h5. This 
-script is made available in the project repository. When `mcrd.Rmd` runs, it 
-subsets a given dataset, builds a classification rule between data and class 
-labels, and provides summaries of these analyses. Results can be viewed within 
-the output files `mcrd.pdf` or `mcrd.html`.
+MNIST and Fashion MNIST are downloaded when `mcrd.Rmd` runs. VesselMNIST3D is 
+provided in the project GitHub repository in both its original .npz file format 
+and an .h5 file format. The Python script 'convert_npz_to_h5.py' was used to 
+convert VesselMNIST3D from .npz to .h5. This script is made available in the 
+project repository. When `mcrd.Rmd` runs, it subsets a given dataset, builds a 
+classification rule between data and class labels, and provides summaries of 
+these analyses. Results can be viewed within output files `mcrd.pdf` or 
+`mcrd.html`.
 
 ## References
 

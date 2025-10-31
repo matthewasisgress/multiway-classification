@@ -1,7 +1,7 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2025-10-29"
+date: "2025-10-31"
 output: pdf_document
 ---
 
@@ -9,25 +9,23 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this demonstration, we apply R package **cpfa** (Asisgress, 2025) to three 
-real datasets. First, we apply the package to the MNIST dataset (LeCun, Cortes, 
-and Burges, 1998; LeCun et al., 2002)---showing how to use the package to 
-distinguish between digits of 2 and 3, a binary classification problem. We 
-further apply the package to the Fashion MNIST dataset (Xiao, Rasul, and 
-Vollgraf, 2017)---distinguishing among images of tops, trousers, and sandals, 
-which is a multiclass classification problem. Finally, we apply the package to 
-the VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST database (Yang 
-et al., 2023; Yang, Shi, Ni, 2021), which contains three-dimensional 
+We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
+apply the package to the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
+et al., 2002)---showing how to use the package to distinguish between digits of 
+2 and 3, a binary classification problem. We also apply it to the Fashion MNIST 
+dataset (Xiao, Rasul, and Vollgraf, 2017)---distinguishing among images of tops, 
+trousers, and sandals, a multiclass classification problem. Finally, we apply it 
+to the VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST database 
+(Yang et al., 2023; Yang, Shi, Ni, 2021), which contains three-dimensional 
 representations of blood vessels. Specifically, we distinguish healthy blood 
-vessels from aneurysm blood vessels, which is a binary classification 
-problem.
+vessels from aneurysm blood vessels, a binary classification problem.
 
 # A.) MNIST
 
-The MNIST dataset consists of 70,000 grayscale images of handwritten digits from 
-0 to 9. We use R package **dslabs** (Irizarry and Gill, 2025) to download the 
-dataset. We subset to only 2000 images from the original training set. The 
-images include 980 images of the digit 2 and 1020 images of the digit 3.
+MNIST consists of 70,000 grayscale images of handwritten digits from 0 to 9. We 
+use R package **dslabs** (Irizarry and Gill, 2025) to download the dataset. We 
+subset to only 2000 images from the original training set. The images include 
+980 images of the digit 2 and 1020 images of the digit 3.
 
 ## Download
 
@@ -41,7 +39,7 @@ inde <- which(mnist$train$labels %in% c(2, 3))
 images <- mnist$train$images[inde, ]
 labels <- mnist$train$labels[inde]
 
-# restructure data into a three-way array and prepare labels
+# restructure data into three-way array and prepare labels
 X0 <- array(images, c(nrow(images), 28, 28))
 y0 <- as.factor(as.numeric(as.factor(labels)) - 1)
 
@@ -51,10 +49,10 @@ X <- X0[ind, , ]
 y <- y0[ind]
 ```
 
-We plot and examine an example of the digit 2 and the digit 3.
+We plot an example of digit 2 and digit 3.
 
 ```{r}
-# plot example of digits 2 and 3
+# plot example of 2 and 3
 par(mfrow = c(1, 2))
 pdigit <- function(imat) {
   m <- t(apply(imat, 2, rev))
@@ -81,20 +79,20 @@ array mode using `const`. Fourth, we use `cmode <- 1` to specify that the
 classification mode is the first mode of the input array (i.e., the mode 
 connected to the class labels). Note that numerous constraint options are 
 available; after loading **cpfa**, type `const()` in the R console to access a 
-constraint options list provided through R package **CMLS** (Helwig, 2025). 
+constraint options list provided by R package **CMLS** (Helwig, 2025). 
 
 Next, we initialize classification methods. First, we use 
 `method = c("PLR", "RF")` to employ penalized logistic regression (PLR) and 
 random forest (RF) classifiers for this problem. See `help(cpfa)` for 
-information on additional classification methods available. Second, we specify 
-that the problem is a binary classification problem by setting 
-`family <- "binomial"`. Third, we use 10-fold cross-validation (CV) in our inner 
-training, setting `nfolds <- 10`; and fourth, we set `nrep <- 5` to perform five 
-outer train-test splits of our data. Fifth, we set `ratio <- 0.9` to specify 
-that each outer training set contains a proportion of 0.9 of the full input 
-data while the outer testing set contains a proportion of 0.1. Finally, we 
-specify ranges for tuning parameters alpha (PLR), the number of trees (RF), and 
-node size (RF), wrapping them into a list called `parameters`.
+information on additional classification methods. Second, we specify that the 
+problem is a binary classification problem by setting `family <- "binomial"`. 
+Third, we use 10-fold cross-validation (CV) in our inner training, setting 
+`nfolds <- 10`; and fourth, we set `nrep <- 5` to perform five outer train-test 
+splits of our data. Fifth, we set `ratio <- 0.9` to specify that each outer 
+training set contains a proportion of 0.9 of the full input data while the outer 
+testing set contains a proportion of 0.1. Finally, we specify ranges for tuning 
+parameters alpha (PLR), the number of trees (RF), and node size (RF), wrapping 
+them into the list called `parameters`.
 
 ```{r, message = FALSE, warning = FALSE}
 # load library
@@ -135,32 +133,30 @@ outputR <- cpfa(x = X, y = y, model = model, nfac = nfac, nstart = nstart,
 
 ## Results
 
-We examine classification performance metrics of error (`err`) and overall
-accuracy (`acc`) for each model and for each classifier, looking at their median
-across outer train-test splits. We also examine, averaged across train-test 
-splits, the optimal tuning parameters chosen (i.e., those that minimized 
-misclassification error in the inner 10-fold CV) for each classifier.
+We examine classification performance metrics error (`err`) and accuracy (`acc`) 
+for each model and for each classifier, looking at median metrics across outer 
+train-test splits. We also examine, averaged across train-test splits, optimal 
+tuning parameters chosen for each classifier.
 
 ```{r}
 # examine classification performance measures - median across train-test splits
 outputR$descriptive$median[, 1:2]
 
-# examine optimal tuning parameters averaged across train-test splits
+# examine optimal tuning parameters - mean across train-test splits
 outputR$mean.opt.tune
 ```
 
-We can see that classification accuracy values are close to 0.9 for both 
-two-component and three-component models. The two-component Parafac model with 
-the RF classifier performed best. In addition, we can see average optimal tuning 
-parameters for each classifier. Note that PLR optimized lambda internally.
+We see that accuracy values are close to 0.9 for both two-component and 
+three-component models. The two-component Parafac model with the RF classifier 
+performed best. In addition, we can see average optimal tuning parameters for 
+each classifier. Note that PLR optimized lambda internally.
 
-Next, we use the function `plotcpfa`. The function performs two tasks: (1) it 
+Next, we use function `plotcpfa`. This function performs two tasks: (1) it 
 fits the optimal model among those fit using function `cpfa`; and (2) it plots 
-the estimated component weights from that model for the non-classification 
-modes. Looking at the plots, we can search for relationships between the 
-levels of mode A or B and the model components. In this case, mode A corresponds 
-to the horizontal axis of the images (e.g., such as those images shown above) 
-while mode B corresponds to the vertical axis.
+estimated component weights from that model for non-classification modes. 
+Looking at such plots, we can search for relationships between model components 
+and levels of mode A or B. In this case, mode A corresponds to the horizontal 
+axis of MNIST images while mode B corresponds to the vertical axis.
 
 ```{r}
 # set seed
@@ -171,30 +167,27 @@ results <- plotcpfa(outputR, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
 For the A mode, component weights are stronger between levels 5 and 24 for the 
-first component. Looking at the B mode, weights are stronger in the middle 
-between levels 4 and 25. Whether viewed from the A mode or B mode perspective, 
-this first component appears to be a general component showing the presence of 
-non-zero values, distinguishing empty outer parts of images from non-zero inner 
-parts. The digits 2 and 3 have systematic differences in the presence of 
-non-zero values in these areas.
+first component. Looking at the B mode, weights are stronger between levels 4 
+and 25. Whether viewed from mode A or B the first component appears to be a 
+general component identifying the presence of non-zero values, distinguishing 
+empty outer parts of images from non-zero inner parts. The digits 2 and 3 have 
+systematic differences in the presence of non-zero values in these areas.
 
-Examining the second component for the A mode, weights are stronger near and
-around level 14 where there appears to be a greater presence of zero values in 
-digit 3 compared to digit 2. A similar pattern exists in the B mode around 
-levels 18 and 19 with more non-zero values for 2, compared to 3. Taken together 
-between the two modes, this component could be identifying the closed circle 
-present in the digit 2, which differs from the open or half circle seen in digit 
-3.
+Examining the second component for the A mode, weights are stronger around level 
+14 where there appears to be a greater presence of zero values in digit 3, 
+compared to digit 2. A similar pattern exists in mode B around levels 18 and 19 
+with more non-zero values for 2, compared to 3. Taken together between the two 
+modes, this component might be identifying the closed circle present in the 
+digit 2, which differs from the open or half circle seen in digit 3.
 
 # B.) Fashion MNIST
 
-The Fashion MNIST dataset consists of 70,000 grayscale images of fashion objects
-within 10 different categories, indexed by class labels of 0 through 9
-(Xiao, Rasul, and Vollgraf, 2017). We use R package **keras3** (Kalinowski, 
-Allaire, and Chollet, 2025) to download the dataset. We subset to only 1000 
-images from the training set. We only use images within the categories of top 
-(with a label of 0), trouser (1), or sandal (5). The images include 308 tops, 
-357 trousers, and 335 sandals. 
+Fashion MNIST consists of 70,000 grayscale images of fashion objects within 10 
+different categories, indexed by class labels of 0 through 9 (Xiao, Rasul, and 
+Vollgraf, 2017). We use R package **keras3** (Kalinowski, Allaire, and Chollet, 
+2025) to download the dataset. We subset to 1000 images from the training set. 
+We only use images within the categories of top (with a label of 0), trouser 
+(1), or sandal (5). Images include 308 tops, 357 trousers, and 335 sandals. 
 
 We remove a different number of horizontal levels from each image, randomly 
 selecting a number of levels between three and six (inclusive) to remove for 
@@ -204,9 +197,9 @@ contains exactly 28 levels for all images. This removal is meant to simulate
 data corruption or sensor malfunction that could lead to incomplete images. To 
 continue forward, we use a Parafac2 model (Harshman, 1972), which can be fit to 
 a ragged array (i.e., one mode has a different number of levels, conditional on 
-another mode). The Parafac2 model maintains properties similar to the Parafac 
-model, including the intrinsic axis property (for details, see Harshman and 
-Lundy, 1994, 1996).
+another mode). Parafac2 maintains properties similar to the Parafac model, 
+including the intrinsic axis property (for details, see Harshman and Lundy, 
+1994, 1996).
 
 ## Download
 
@@ -214,13 +207,13 @@ Lundy, 1994, 1996).
 # load library
 library(keras3)
 
-# download Fashion MNIST data and subset training set to categories of 0, 1, 5
+# download Fashion MNIST and subset training set to categories of 0, 1, 5
 fmnist <- dataset_fashion_mnist()
 inde <- which(fmnist$train$y %in% c(0, 1, 5))
 X0 <- fmnist$train$x[inde, ,]
 labels <- fmnist$train$y[inde]
 
-# prepare labels by converting labels to class factor with levels of 0, 1, and 2
+# prepare labels by converting to class factor with levels of 0, 1, and 2
 y0 <- as.factor(as.numeric(as.factor(labels)) - 1)
 
 # subset to first 1000 images
@@ -229,13 +222,13 @@ nimage <- length(ind)
 Xp <- X0[ind, , ]
 y <- y0[ind]
 
-# permute the array to make the third mode the classification mode 
+# permute array to make third mode classification mode 
 X <- aperm(Xp, c(2, 3, 1))
 
 # set seed
 set.seed(500)
 
-# remove rows from each image and restructure array into a list of images
+# remove rows from each image and restructure array into list of images
 nremove <- sample(3:6, nimage, replace = TRUE)
 Xrag <- vector(mode = "list", length = nimage)
 for (i in 1:nimage) {
@@ -272,13 +265,10 @@ set the third mode to have non-negative weights.
 
 Next, we initialize classification methods. First, we use 
 `method = c("SVM", "GBM")` to use support vector machine (SVM) and gradient 
-boosting machine (GBM). Second, we specify that the problem is 
-a multiclass classification problem by setting `family <- "multinomial"`. Third, 
-we use 10-fold CV in our inner training, setting 
-`nfolds <- 10`; and fourth, we set `nrep <- 5` to perform five outer train-test 
-splits of our data. Fifth, we set `ratio <- 0.9` to specify that each outer 
-training set contains a proportion of 0.9 of the full data while the outer 
-testing set contains a proportion of 0.1. Finally, we specify ranges for tuning 
+boosting machine (GBM). Second, we specify that the problem is a multiclass 
+classification problem by setting `family <- "multinomial"`. Third, we use 
+10-fold CV in our inner training, setting `nfolds <- 10`; and fourth, we set 
+`nrep <- 5`. Fifth, we set `ratio <- 0.9`. Finally, we specify ranges for tuning 
 parameters gamma (SVM), cost (SVM), eta (GBM), maximum depth (GBM), subsample 
 (GBM), and number of rounds (GBM), wrapping them into `parameters`.
 
@@ -311,31 +301,31 @@ parameters <- list(gamma = gamma, cost = cost, eta = eta, max.depth = max.depth,
 
 # implement train-test splits with inner k-fold CV to optimize classification
 outputR2 <- cpfa(x = Xrag, y = y, model = model, nfac = nfac, nstart = nstart,
-                const = const, method = method, family = family, 
-                nfolds = nfolds, nrep = nrep, ratio = ratio, 
-                parameters = parameters, type.out = "descriptives", 
-                seeds = NULL, plot.out = TRUE, parallel = FALSE, 
-                verbose = FALSE)
+                 const = const, method = method, family = family, 
+                 nfolds = nfolds, nrep = nrep, ratio = ratio, 
+                 parameters = parameters, type.out = "descriptives", 
+                 seeds = NULL, plot.out = TRUE, parallel = FALSE, 
+                 verbose = FALSE)
 ```
 
 ## Results
 
-We examine classification performance metrics of error (`err`) and overall
-accuracy (`acc`) for each model and for each classifier, averaged across 
-train-test splits. We also examine, averaged across train-test splits, the 
-optimal tuning parameters chosen for each classifier.
+We examine classification performance metrics for each model and for each 
+classifier, this time averaged across train-test splits. We also examine, 
+averaged across train-test splits, the optimal tuning parameters chosen for each 
+classifier.
 
 ```{r}
 # examine classification performance measures - mean across train-test splits
 outputR2$descriptive$mean[, 1:2]
 
-# examine optimal tuning parameters averaged across train-test splits
+# examine optimal tuning parameters - mean across train-test splits
 outputR2$mean.opt.tune
 ```
 
-We see that accuracy values are between 0.9 and 0.928. The three-component 
-Parafac2 model with the GBM classifier performed best. In addition, we can see 
-average optimal tuning parameters for each classifier. 
+Accuracy values are between 0.9 and 0.928. The three-component Parafac2 model 
+with the GBM classifier performed best. In addition, average optimal tuning 
+parameters span a range for each classifier. 
 
 Next, we use function `plotcpfa`. Because the number of levels differs among 
 images for mode A, we cannot inspect mode A weights easily. Function `plotcpfa` 
@@ -379,16 +369,15 @@ components further and change the current interpretations.
 
 # C.) VesselMNIST3D from MedMNIST
 
-The VesselMNIST3D dataset consists of 1,908 three-dimensional models of brain 
-blood vessels based on reconstructed magnetic resonance images. Vessels exist
-in two categories: healthy vessels (indexed by 0) or aneurysm vessels (indexed
-by 1). We download the dataset manually from <https://medmnist.com/>, which 
-gives us a .npz file. We use the Python script entitled `convert_npz_to_h5.py`
-to convert VesselMNIST3D from a file format of .npz to .h5. This script can be
-found on this project's GitHub repository. Next, we use R package **rhdf5** 
-(Fischer, Smith, and Pau, 2025) to read the data (in .h5 file format) into R. 
-We subset to only 300 objects from the training set, including 150 healthy 
-vessels and 150 aneurysm vessels.
+VesselMNIST3D consists of 1,908 three-dimensional models of brain blood vessels 
+based on reconstructed magnetic resonance imaging data. Vessels exist in two 
+categories: healthy vessels (indexed by 0) or aneurysm vessels (1). We download 
+the dataset manually from <https://medmnist.com/>, which gives us a .npz file. 
+We use the Python script `convert_npz_to_h5.py` to convert VesselMNIST3D from 
+a file format of .npz to .h5. This script can be found on the project's
+repository. Next, we use R package **rhdf5** (Fischer, Smith, and Pau, 2025) to 
+read the data (as a .h5) into R. We subset to only 300 objects from the training 
+set, including 150 healthy vessels and 150 aneurysm vessels.
 
 ## Download
 
@@ -435,23 +424,20 @@ plot_ly(voxel_df, x = ~x, y = ~y, z = ~z, type = "scatter3d", mode = "markers",
 
 ## Analysis
 
-We load R package **cpfa** and initialize the tensor model. First, the data 
-array is a regular four-way array; so we set `model <- "parafac"` to 
-use a Parafac model. Second, we initialize the number of components to fit by 
-setting `nfac <- c(2, 3)`. Third, we set `nstart <- 10` for 10 random starts. 
-Fourth, we specify the constraint for each mode using `const`. For Parafac, we 
-set the fourth mode to have non-negative weights.
+We load **cpfa** and initialize the tensor model. First, the data array is a 
+regular four-way array; so we set `model <- "parafac"`. Second, we initialize 
+the number of components to fit by setting `nfac <- c(2, 3)`. Third, we set 
+`nstart <- 10`. Fourth, we specify the constraint for each mode using `const`. 
+For Parafac, we set the fourth mode to have non-negative weights.
 
 Next, we initialize classification methods. First, we use 
 `method = c("NN", "RDA")` to use feed-forward neural networks (NN) and 
 regularized discriminant analysis (RDA). Second, we specify that the problem is 
-a binary classification problem by setting `family <- "binomial"`. Third, 
+a binary classification problem, setting `family <- "binomial"`. Third, 
 we use 10-fold CV in our inner training, setting `nfolds <- 10`; and fourth, we 
-set `nrep <- 5` to perform five outer train-test splits of our data. Fifth, we 
-set `ratio <- 0.9` to specify that each outer training set contains a proportion 
-of 0.9 of the full data while the outer testing set contains a proportion of 
-0.1. Finally, we specify ranges for tuning parameters alpha (RDA), delta (RDA), 
-size (NN), and decay (NN), wrapping them into `parameters`.
+set `nrep <- 5` to perform five outer train-test splits. Fifth, we set 
+`ratio <- 0.9`. Finally, we specify ranges for tuning parameters alpha (RDA), 
+delta (RDA), size (NN), and decay (NN), wrapping them into `parameters`.
 
 ```{r, message = FALSE, warning = FALSE}
 # load library
@@ -490,26 +476,26 @@ outputR3 <- cpfa(x = Xp, y = y, model = model, nfac = nfac, nstart = nstart,
 
 ## Results
 
-We examine classification performance metrics of error (`err`) and overall
-accuracy (`acc`) for each model and for each classifier, averaged across 
-train-test splits. We also examine, averaged across train-test splits, the 
-optimal tuning parameters chosen for each classifier.
+We examine classification performance metrics of error and accuracy for each 
+model and for each classifier, averaged across train-test splits. We also 
+examine, averaged across train-test splits, the optimal tuning parameters chosen 
+for each classifier.
 
 ```{r}
 # examine classification performance measures - mean across train-test splits
 outputR3$descriptive$mean[, 1:2]
 
-# examine optimal tuning parameters averaged across train-test splits
+# examine optimal tuning parameters - mean across train-test splits
 outputR3$mean.opt.tune
 ```
 
-We see that accuracy values are between 0.65 and 0.71. The three-component 
-Parafac model with the RDA classifier performed best. In addition, we can see 
-average optimal tuning parameters for each classifier. 
+Accuracy values are between 0.65 and 0.71. The three-component Parafac model 
+with the RDA classifier performed best. In addition, average optimal tuning 
+parameters are available for each classifier. 
 
-Next, we use function `plotcpfa`. Looking at the plots, we can search for 
-relationships between the levels of mode A, B, or C and the model components. In 
-this case, the three modes correspond to the three dimensions of the vessels.
+Next, we use `plotcpfa`. Looking at plots, we can search for relationships 
+between the levels of mode A, B, or C and model components. In this case, the 
+three modes correspond to the three dimensions of the vessels.
 
 ```{r}
 # set seed
@@ -519,11 +505,10 @@ set.seed(500)
 results3 <- plotcpfa(outputR3, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
-For now, we omit interpretations of the three components, given the difficulty 
+We omit interpretations of the three components, given the difficulty 
 of visualizing each blood vessel object. For more information about this dataset
-and classification work using it, interested parties might consider exploring 
-Yang, Xia, Kin, and Igarashi (2020); Yang et al. (2023); and Yang, Shi, and Ni 
-(2021).
+and classification work using it, consider exploring Yang, Xia, Kin, and 
+Igarashi (2020); Yang et al. (2023); and Yang, Shi, and Ni (2021).
 
 # References
 

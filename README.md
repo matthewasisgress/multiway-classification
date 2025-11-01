@@ -8,7 +8,7 @@ Package URL: <https://CRAN.R-project.org/package=cpfa>.
 ## Overview
 
 We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
-apply the package MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
+apply the package to MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
 2002)---showing how the package can be used to distinguish between images of the
 digits 2 and 3. Next, we apply the package to Fashion MNIST (Xiao, Rasul, and 
 Vollgraf, 2017)---distinguishing among images of tops, trousers, and sandals. 

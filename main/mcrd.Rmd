@@ -1,8 +1,8 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2025-10-31"
-output: html_document
+date: "2025-11-01"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -10,15 +10,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
-apply the package to the MNIST dataset (LeCun, Cortes, and Burges, 1998; LeCun 
-et al., 2002)---showing how to use the package to distinguish between digits of 
-2 and 3, a binary classification problem. We also apply it to the Fashion MNIST 
-dataset (Xiao, Rasul, and Vollgraf, 2017)---distinguishing among images of tops, 
-trousers, and sandals, a multiclass classification problem. Finally, we apply it 
-to the VesselMNIST3D dataset (Yang et al., 2020) from the MedMNIST database 
-(Yang et al., 2023; Yang, Shi, Ni, 2021), which contains three-dimensional 
-representations of blood vessels. Specifically, we distinguish healthy blood 
-vessels from aneurysm blood vessels, a binary classification problem.
+apply the package to MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
+2002)---showing how the package can be used to distinguish between images of the
+digits 2 and 3. Next, we apply the package to Fashion MNIST (Xiao, Rasul, and 
+Vollgraf, 2017)---distinguishing among images of tops, trousers, and sandals. 
+Finally, we apply the package to VesselMNIST3D (Yang et al., 2020) from the 
+MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021). VesselMNIST3D 
+contains three-dimensional representations of blood vessels, and we distinguish 
+healthy blood vessels from aneurysm blood vessels.
 
 # A.) MNIST
 
@@ -149,7 +148,7 @@ outputR$mean.opt.tune
 We see that accuracy values are close to 0.9 for both two-component and 
 three-component models. The two-component Parafac model with the RF classifier 
 performed best. In addition, we can see average optimal tuning parameters for 
-each classifier. Note that PLR optimized lambda internally.
+each model. Note that PLR optimized lambda internally.
 
 Next, we use function `plotcpfa`. This function performs two tasks: (1) it 
 fits the optimal model among those fit using function `cpfa`; and (2) it plots 
@@ -325,7 +324,7 @@ outputR2$mean.opt.tune
 
 Accuracy values are between 0.9 and 0.928. The three-component Parafac2 model 
 with the GBM classifier performed best. In addition, average optimal tuning 
-parameters span a range for each classifier. 
+parameters are available for each model. 
 
 Next, we use function `plotcpfa`. Because the number of levels differs among 
 images for mode A, we cannot inspect mode A weights easily. Function `plotcpfa` 
@@ -476,10 +475,9 @@ outputR3 <- cpfa(x = Xp, y = y, model = model, nfac = nfac, nstart = nstart,
 
 ## Results
 
-We examine classification performance metrics of error and accuracy for each 
-model and for each classifier, averaged across train-test splits. We also 
-examine, averaged across train-test splits, the optimal tuning parameters chosen 
-for each classifier.
+We examine classification performance metrics for each model and classifier, 
+averaged across train-test splits. We also examine, averaged across train-test 
+splits, optimal tuning parameters for each model.
 
 ```{r}
 # examine classification performance measures - mean across train-test splits

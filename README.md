@@ -65,7 +65,7 @@ these analyses. Results can be viewed within output files `mcrd.pdf` or
 ## References
 
 Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-2, <https://CRAN.R-project.org/package=cpfa>.
+R package version 1.2-3, <https://CRAN.R-project.org/package=cpfa>.
 
 Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to HDF5. 
 R package version 2.52.1, <https://bioconductor.org/packages/rhdf5>.

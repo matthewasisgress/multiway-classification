@@ -1,7 +1,7 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2025-11-01"
+date: "2025-11-11"
 output: pdf_document
 ---
 
@@ -9,15 +9,19 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-We apply R package **cpfa** (Asisgress, 2025) to three real datasets. First, we 
+We apply R package **cpfa** (Asisgress, 2025) to four real datasets. First, we 
 apply the package to MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
 2002)---showing how the package can be used to distinguish between images of the
-digits 2 and 3. Next, we apply the package to Fashion MNIST (Xiao, Rasul, and 
+digits 2 and 3. Second, we apply the package to Fashion MNIST (Xiao, Rasul, and 
 Vollgraf, 2017)---distinguishing among images of tops, trousers, and sandals. 
-Finally, we apply the package to VesselMNIST3D (Yang et al., 2020) from the 
+Third, we apply the package to VesselMNIST3D (Yang et al., 2020) from the 
 MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021). VesselMNIST3D 
 contains three-dimensional representations of blood vessels, and we distinguish 
-healthy blood vessels from aneurysm blood vessels.
+healthy blood vessels from aneurysm blood vessels. Finally, we apply the package 
+to OrganMNIST3D (Bilic et al., 2023; Xu et al., 2019) from the MedMNIST database 
+(Yang et al., 2023; Yang, Shi, Ni, 2021). OrganMNIST3D contains 
+three-dimensional representations of abdominal organs, and we distinguish among 
+four organs.
 
 # A.) MNIST
 
@@ -508,10 +512,223 @@ of visualizing each blood vessel object. For more information about this dataset
 and classification work using it, consider exploring Yang, Xia, Kin, and 
 Igarashi (2020); Yang et al. (2023); and Yang, Shi, and Ni (2021).
 
+# D.) OrganMNIST3D from MedMNIST
+
+OrganMNIST3D consists of 1,742 three-dimensional models of computed tomography 
+scans of abdominal organs from the Liver Tumor Segmentation Benchmark (LiTS; 
+Bilic et al., 2023). Yang et al. (2023) used bounding-box annotations of 11 body 
+organs from another study (Xuanang  et al., 2019) to obtain organ labels. We 
+use four categories: bladder (indexed by 0), left femur (1), pancreas (9), and 
+spleen (10). As with VesselMNIST3D, we download OrganMNIST3D manually from <https://medmnist.com/>, which gives us a .npz file. After changing the name
+from `vesselmnist3d` to `organmnist3d` at lines four and five, we use the 
+Python script `convert_npz_to_h5.py` to convert OrganMNIST3D from a file format 
+of .npz to .h5. Next, we use R package **rhdf5** (Fischer, Smith, and Pau, 2025) 
+to read the data (as a .h5) into R. We subset to only 460 objects from the 
+training set---including 115 bladder, 115 left femur, 115 pancreas, and 115 
+spleen.
+
+## Download
+
+```{r, message = FALSE, warning = FALSE}
+# load library
+library(rhdf5)
+
+# import OrganMNIST3D data
+h5file <- "organmnist3d.h5"
+imag4d <- h5read(h5file, name = "train_images")
+labels <- h5read(h5file, name = "train_labels")
+
+# convert labels to factor
+y0 <- as.factor(as.numeric(labels))
+
+# identify labels of 0, 1, 9, and 10
+ind <- which(y0 %in% c(0, 1, 9, 10))
+
+# subset to bladder, left femur, pancreas, and spleen
+Xp <- imag4d[ , , , ind]
+y1 <- y0[ind]
+y <- droplevels(y1)
+
+# reset class labels
+levels(y) <- c(0, 1, 2, 3)
+
+# convert array to double
+storage.mode(Xp) <- "double"
+
+# remove full dataset
+rm(imag4d)
+```
+
+We use R package **plotly** (Sievert, 2020) to generate a colored point cloud 
+representation of a spleen.
+
+```{r, message = FALSE, warning = FALSE}
+# load library
+library(plotly)
+
+# obtain coordinates of voxels above threshold
+voxcord <- which(Xp[, , , 459] > 0, arr.ind = TRUE)
+
+# combine into single data frame
+voxdf <- as.data.frame(voxcord)
+colnames(voxdf) <- c("x", "y", "z")
+voxdf$intensity <- Xp[, , , 459][voxcord]
+
+# set up 3D plot
+scene1 <- list(title = "", showticklabels = FALSE, showgrid = TRUE, 
+               showline = FALSE, zeroline = FALSE)
+marklist <- list(size = 3.5, color = ~intensity, colorscale = 'Viridis', 
+                 showscale = TRUE, opacity = 0.5)
+fscence <- list(xaxis = scene1, yaxis = scene1, zaxis = scene1)
+
+# generate 3D plot
+plot_ly(voxdf, x = ~x, y = ~y, z = ~z, type = "scatter3d", mode = "markers",
+        marker = marklist) %>% 
+          layout(title = "3D Example of Spleen - Intensity Plot", 
+                 scene = fscence)
+```
+
+We remove a different number of levels from each object, randomly selecting a 
+number of levels between three and six (inclusive) to remove from the first 
+mode. The resulting array is ragged: mode A contains a different number of 
+levels for each object while modes B and C each contain exactly 28 levels for 
+all objects. This removal is meant to simulate motion artifacts from CT scans 
+that might make some slices unusable and that might have been removed by a 
+quality control algorithm. To continue, we use a Parafac2 model.
+
+```{r, message = FALSE, warning = FALSE}
+# set seed
+set.seed(500)
+
+# remove levels from mode A for each object and restructure into list of objects
+nobj <- length(y)
+nremove <- sample(3:6, nobj, replace = TRUE)
+Xrag <- vector(mode = "list", length = nobj)
+for (i in 1:nobj) {
+   ranremove <- c(sample(1:28, nremove[i]))
+   image0 <- Xp[-ranremove, , , i]
+   Xrag[[i]] <- image0
+}
+```
+
+## Analysis
+
+We load **cpfa** and initialize the tensor model. First, the data array is a 
+ragged four-way array; so we set `model <- "parafac2"`. Second, we initialize 
+the number of components to fit by setting `nfac <- c(3, 4)`. Third, we set 
+`nstart <- 10`. Fourth, we specify the constraint for each mode using `const`. 
+For Parafac2, we set the fourth mode to have non-negative weights.
+
+Next, we initialize classification methods. First, we use 
+`method = c("RF", "GBM")` to use RF and GBM. Second, we specify that the problem 
+is multiclass, setting `family <- "multinomial"`. Third, we use 10-fold CV in 
+our inner training, setting `nfolds <- 10`; and fourth, we set `nrep <- 5` to 
+perform five outer train-test splits. Fifth, we set `ratio <- 0.9`. Finally, we 
+specify ranges for tuning parameters the number of trees (RF), node size (RF), 
+eta (GBM), maximum depth (GBM), subsample (GBM), and number of rounds (GBM), 
+wrapping them into the list called `parameters`.
+
+```{r, message = FALSE, warning = FALSE}
+# set seed
+set.seed(500)
+
+# initialize model 
+model <- "parafac2"
+nfac <- c(3, 4)
+nstart <- 10
+const <- c("uncons", "uncons", "uncons", "nonneg")
+
+# initialize classification
+method <- c("RF", "GBM")
+family <- "multinomial"
+nfolds <- 10
+nrep <- 5
+ratio <- 0.9
+
+# initialize tuning parameters
+ntree <- c(400, 600, 800, 1000)
+nodesize <- c(4, 8, 16, 32)
+eta <- c(0.3, 0.7); max.depth <- c(1, 2)
+subsample <- c(0.75, 0.9); nrounds <- c(100, 400)
+parameters <- list(ntree = ntree, nodesize = nodesize, eta = eta, 
+                   max.depth = max.depth, subsample = subsample, 
+                   nrounds = nrounds)
+
+# implement train-test splits with inner k-fold CV to optimize classification
+outputR4 <- cpfa(x = Xrag, y = y, model = model, nfac = nfac, nstart = nstart,
+                 const = const, method = method, family = family, 
+                 nfolds = nfolds, nrep = nrep, ratio = ratio, 
+                 parameters = parameters, type.out = "descriptives", 
+                 seeds = NULL, plot.out = TRUE, parallel = FALSE, 
+                 verbose = FALSE)
+```
+
+## Results
+
+We examine classification performance metrics for each model and classifier, 
+averaged across train-test splits. We also examine, averaged across train-test 
+splits, optimal tuning parameters for each model.
+
+```{r}
+# examine classification performance measures - mean across train-test splits
+outputR4$descriptive$mean[, 1:2]
+
+# examine optimal tuning parameters - mean across train-test splits
+outputR4$mean.opt.tune
+```
+
+Accuracy values are between 0.55 and 0.56. The three-component Parafac2 model 
+with the RF classifier performed best (i.e., we choose RF because it has fewer
+tuning parameters than GBM, in this case). In addition, average optimal tuning 
+parameters are available for each classifier. 
+
+Next, we use `plotcpfa`. Looking at plots, we can search for relationships 
+between the levels of the modes and model components. In this case, the 
+modes A, B, and C correspond to the three dimensions of the organs while the
+fourth mode corresponds to the different organ objects.
+
+```{r}
+# set seed
+set.seed(500)
+
+# plot heatmaps of component weights for optimal model
+results4 <- plotcpfa(outputR4, nstart = 10, ctol = 1e-6, verbose = FALSE)
+```
+
+We omit interpretations of the three components, given the difficulty 
+of visualizing each organ object. However, we do consider box plots of the mode
+D weights.
+
+```{r}
+# define estimated D weights
+mat <- results4$`D Weights`
+
+# set up box plots
+groups <- factor(rep(1:length(levels(y)), each = 115), 
+                 labels = c("Bladder", "Femur", "Pancreas", "Spleen"))
+
+# generate box plots
+for (i in 1:3) {
+   boxplot(mat[, i] ~ groups, 
+          main = paste("D weights for Component", i), xlab = "Organ",
+          ylab = "D Weights", col = "lightblue", border = "darkblue")
+}
+```
+
+Examining medians, the first component appears to distinguish the spleen from 
+other organs; the second component, the femur and spleen from the pancreas and 
+bladder; and the third component, the pancreas and spleen from the other organs. 
+More work would need to be done to investigate estimated B weights and C weights 
+to further interpret these components.
+
 # References
 
 Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
 R package version 1.2-2, <https://CRAN.R-project.org/package=cpfa>.
+
+Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
+and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 
+Image Analysis, 84, 102680.
 
 Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to HDF5. 
 R package version 2.52.1, <https://bioconductor.org/packages/rhdf5>.
@@ -559,6 +776,10 @@ and shiny. Chapman and Hall/CRC.
 Xiao, H., Rasul, K., and Vollgraf, R. (2017). Fashion-mnist: a novel image 
 dataset for benchmarking machine learning algorithms. arXiv preprint 
 arXiv:1708.07747.
+
+Xu, X., Zhou, F., Liu, B., Fu, D., and Bai, X. (2019). Efficient multiple organ 
+localization in CT image using 3D region proposal network. IEEE Transactions on 
+Medical Imaging, 38(8), 1885-1898.
 
 Yang, J., Shi, R., and Ni, B. (April 2021). Medmnist classification decathlon: 
 A lightweight automl benchmark for medical image analysis. In 2021 IEEE 18th 

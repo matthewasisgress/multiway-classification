@@ -352,26 +352,30 @@ display: none;
 </div>
 
 
-<div id="multiway-classification" class="section level1">
-<h1>multiway-classification</h1>
-<p>Application of the R package <strong>cpfa</strong> to three real
+<div id="multiway-classification-with-real-data" class="section level1">
+<h1>Multiway Classification with Real Data</h1>
+<p>Application of the R package <strong>cpfa</strong> to four real
 datasets.</p>
 <p>Author: Matthew Asisgress</p>
 <p>Package URL: <a href="https://CRAN.R-project.org/package=cpfa" class="uri">https://CRAN.R-project.org/package=cpfa</a>.</p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>We apply R package <strong>cpfa</strong> (Asisgress, 2025) to three
+<p>We apply R package <strong>cpfa</strong> (Asisgress, 2025) to four
 real datasets. First, we apply the package to MNIST (LeCun, Cortes, and
 Burges, 1998; LeCun et al., 2002)—showing how the package can be used to
-distinguish between images of the digits 2 and 3. Next, we apply the
+distinguish between images of the digits 2 and 3. Second, we apply the
 package to Fashion MNIST (Xiao, Rasul, and Vollgraf,
-2017)—distinguishing among images of tops, trousers, and sandals.
-Finally, we apply the package to VesselMNIST3D (Yang et al., 2020) from
-the MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021).
+2017)—distinguishing among images of tops, trousers, and sandals. Third,
+we apply the package to VesselMNIST3D (Yang et al., 2020) from the
+MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021).
 VesselMNIST3D contains three-dimensional representations of blood
 vessels, and we distinguish healthy blood vessels from aneurysm blood
-vessels. For this project, the source file <code>mcrd.Rmd</code>
-contains original text and code used to produce the two reports
+vessels. Finally, we apply the package to OrganMNIST3D (Bilic et al.,
+2023; Xu et al., 2019) from the MedMNIST database (Yang et al., 2023;
+Yang, Shi, Ni, 2021). OrganMNIST3D contains three-dimensional
+representations of abdominal organs, and we distinguish among four
+organs. For this project, the source file <code>mcrd.Rmd</code> contains
+original text and code used to produce the two reports
 <code>mcrd.pdf</code> and <code>mcrd.html</code>, which both contain
 results.</p>
 </div>
@@ -400,33 +404,41 @@ Comprehensive R Archive Network (CRAN) including: <strong>cpfa</strong>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-<p>This project uses three datasets. First, it uses MNIST (LeCun,
-Cortes, and Burges, 1998; LeCun et al., 2002). Yann LeCun and Corinna
-Cortes hold the copyright of the MNIST dataset, which is a derivative
-work from the original NIST datasets. MNIST is made available under the
-terms of the CC BY-SA 3.0 license, which can be viewed here: <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" class="uri">https://creativecommons.org/licenses/by-sa/3.0/deed.en</a>.
-Moreover, this project uses Fashion MNIST (Xiao, Rasul, and Vollgraf,
+<p>This project uses four datasets. First, it uses MNIST (LeCun, Cortes,
+and Burges, 1998; LeCun et al., 2002). Yann LeCun and Corinna Cortes
+hold the copyright of the MNIST dataset, which is a derivative work from
+the original NIST datasets. MNIST is made available under the terms of
+the CC BY-SA 3.0 license, which can be viewed here: <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en" class="uri">https://creativecommons.org/licenses/by-sa/3.0/deed.en</a>.
+Second, this project uses Fashion MNIST (Xiao, Rasul, and Vollgraf,
 2017). Zalando SE holds the copyright for Fashion MNIST, and the
 associated MIT license for this dataset can be found at the end of this
-README. Finally, this project uses VesselMNIST3D (Yang et al., 2020)
-from the MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021).
+README. Third, this project uses VesselMNIST3D (Yang et al., 2020) from
+the MedMNIST database (Yang et al., 2023; Yang, Shi, Ni, 2021).
 VesselMNIST3D is made available under the terms of the Creative Commons
 Attribution 4.0 International (CC BY 4.0) license, which can be viewed
-here: <a href="https://creativecommons.org/licenses/by/4.0/deed.en" class="uri">https://creativecommons.org/licenses/by/4.0/deed.en</a>.</p>
+here: <a href="https://creativecommons.org/licenses/by/4.0/deed.en" class="uri">https://creativecommons.org/licenses/by/4.0/deed.en</a>.
+Finally, this project uses OrganMNIST3D (Bilic et al., 2023; Xu et al.,
+2019) from the MedMNIST database (Yang et al., 2023; Yang, Shi, Ni,
+2021). OrganMNIST3D is also made available under the terms of the CC BY
+4.0 license.</p>
 <p>MNIST and Fashion MNIST are downloaded when <code>mcrd.Rmd</code>
-runs. VesselMNIST3D is provided in the project GitHub repository in both
-its original .npz file format and an .h5 file format. The Python script
-‘convert_npz_to_h5.py’ was used to convert VesselMNIST3D from .npz to
-.h5. This script is made available in the project repository. When
-<code>mcrd.Rmd</code> runs, it subsets a given dataset, builds a
-classification rule between data and class labels, and provides
-summaries of these analyses. Results can be viewed within output files
-<code>mcrd.pdf</code> or <code>mcrd.html</code>.</p>
+runs. VesselMNIST3D and OrganMNIST3D are provided in the project GitHub
+repository in both their original .npz file formats and .h5 file
+formats. The Python script ‘convert_npz_to_h5.py’ was used to convert
+VesselMNIST3D and OrganMNIST3D from .npz to .h5. This script is made
+available in the project repository. When <code>mcrd.Rmd</code> runs, it
+subsets a given dataset, builds a classification rule between data and
+class labels, and provides summaries of these analyses. Results can be
+viewed within output files <code>mcrd.pdf</code> or
+<code>mcrd.html</code>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
 <p>Asisgress, M. (2025). cpfa: Classification with Parallel Factor
 Analysis. R package version 1.2-3, <a href="https://CRAN.R-project.org/package=cpfa" class="uri">https://CRAN.R-project.org/package=cpfa</a>.</p>
+<p>Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis,
+G., … and Menze, B. (2023). The liver tumor segmentation benchmark
+(lits). Medical Image Analysis, 84, 102680.</p>
 <p>Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to
 HDF5. R package version 2.52.1, <a href="https://bioconductor.org/packages/rhdf5" class="uri">https://bioconductor.org/packages/rhdf5</a>.</p>
 <p>Helwig, N. (2025). CMLS: Constrained Multivariate Least Squares. R
@@ -449,6 +461,9 @@ plotly, and shiny. Chapman and Hall/CRC.</p>
 <p>Xiao, H., Rasul, K., and Vollgraf, R. (2017). Fashion-mnist: a novel
 image dataset for benchmarking machine learning algorithms. arXiv
 preprint arXiv:1708.07747.</p>
+<p>Xu, X., Zhou, F., Liu, B., Fu, D., and Bai, X. (2019). Efficient
+multiple organ localization in CT image using 3D region proposal
+network. IEEE Transactions on Medical Imaging, 38(8), 1885-1898.</p>
 <p>Yang, J., Shi, R., and Ni, B. (April 2021). Medmnist classification
 decathlon: A lightweight automl benchmark for medical image analysis. In
 2021 IEEE 18th International Symposium on Biomedical Imaging (ISBI)

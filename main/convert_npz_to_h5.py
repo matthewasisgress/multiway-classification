@@ -1,8 +1,8 @@
 import numpy as np
 import h5py
 import sys
-NPZ_FILE = 'vesselmnist3d.npz'
-H5_FILE = 'vesselmnist3d.h5'
+NPZ_FILE = 'organmnist3d.npz'
+H5_FILE = 'organmnist3d.h5'
 try:
     npz_data = np.load(NPZ_FILE)
 except Exception as e:

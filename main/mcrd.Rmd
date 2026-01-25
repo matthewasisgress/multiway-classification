@@ -1,7 +1,7 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2025-11-11"
+date: "2026-01-24"
 output: pdf_document
 ---
 
@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-We apply R package **cpfa** (Asisgress, 2025) to four real datasets. First, we 
+We apply R package **cpfa** (Asisgress, 2026) to four real datasets. First, we 
 apply the package to MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
 2002)---showing how the package can be used to distinguish between images of the
 digits 2 and 3. Second, we apply the package to Fashion MNIST (Xiao, Rasul, and 
@@ -267,13 +267,12 @@ Fourth, we specify the constraint for each mode using `const`. For Parafac2, we
 set the third mode to have non-negative weights.
 
 Next, we initialize classification methods. First, we use 
-`method = c("SVM", "GBM")` to use support vector machine (SVM) and gradient 
-boosting machine (GBM). Second, we specify that the problem is a multiclass 
-classification problem by setting `family <- "multinomial"`. Third, we use 
+`method = c("SVM")` to use support vector machine (SVM). Second, we specify that 
+the problem is a multiclass classification 
+problem by setting `family <- "multinomial"`. Third, we use 
 10-fold CV in our inner training, setting `nfolds <- 10`; and fourth, we set 
 `nrep <- 5`. Fifth, we set `ratio <- 0.9`. Finally, we specify ranges for tuning 
-parameters gamma (SVM), cost (SVM), eta (GBM), maximum depth (GBM), subsample 
-(GBM), and number of rounds (GBM), wrapping them into `parameters`.
+parameters gamma (SVM) and cost (SVM), wrapping them into `parameters`.
 
 ```{r, message = FALSE, warning = FALSE}
 # load library
@@ -289,7 +288,7 @@ nstart <- 10
 const <- c("uncons", "uncons", "nonneg")
 
 # initialize classification
-method <- c("SVM", "GBM")
+method <- c("SVM")
 family <- "multinomial"
 nfolds <- 10
 nrep <- 5
@@ -297,10 +296,7 @@ ratio <- 0.9
 
 # initialize tuning parameters
 gamma <- c(0, 0.1, 1, 10); cost <- c(0.1, 1, 10, 100)
-eta <- c(0.3, 0.7); max.depth <- c(1, 2)
-subsample <- c(0.75, 0.9); nrounds <- c(100, 400)
-parameters <- list(gamma = gamma, cost = cost, eta = eta, max.depth = max.depth, 
-                   subsample = subsample, nrounds = nrounds)
+parameters <- list(gamma = gamma, cost = cost)
 
 # implement train-test splits with inner k-fold CV to optimize classification
 outputR2 <- cpfa(x = Xrag, y = y, model = model, nfac = nfac, nstart = nstart,
@@ -326,8 +322,8 @@ outputR2$descriptive$mean[, 1:2]
 outputR2$mean.opt.tune
 ```
 
-Accuracy values are between 0.9 and 0.928. The three-component Parafac2 model 
-with the GBM classifier performed best. In addition, average optimal tuning 
+Accuracy values are between 0.9 and 0.922. The three-component Parafac2 model 
+with the SVM classifier performed best. In addition, average optimal tuning 
 parameters are available for each model. 
 
 Next, we use function `plotcpfa`. Because the number of levels differs among 
@@ -620,13 +616,12 @@ the number of components to fit by setting `nfac <- c(3, 4)`. Third, we set
 For Parafac2, we set the fourth mode to have non-negative weights.
 
 Next, we initialize classification methods. First, we use 
-`method = c("RF", "GBM")` to use RF and GBM. Second, we specify that the problem 
+`method = c("RF", "SVM")` to use RF and SVM. Second, we specify that the problem 
 is multiclass, setting `family <- "multinomial"`. Third, we use 10-fold CV in 
 our inner training, setting `nfolds <- 10`; and fourth, we set `nrep <- 5` to 
 perform five outer train-test splits. Fifth, we set `ratio <- 0.9`. Finally, we 
 specify ranges for tuning parameters the number of trees (RF), node size (RF), 
-eta (GBM), maximum depth (GBM), subsample (GBM), and number of rounds (GBM), 
-wrapping them into the list called `parameters`.
+gamma (SVM), and cost (SVM), wrapping them into the list called `parameters`.
 
 ```{r, message = FALSE, warning = FALSE}
 # set seed
@@ -639,7 +634,7 @@ nstart <- 10
 const <- c("uncons", "uncons", "uncons", "nonneg")
 
 # initialize classification
-method <- c("RF", "GBM")
+method <- c("RF", "SVM")
 family <- "multinomial"
 nfolds <- 10
 nrep <- 5
@@ -648,11 +643,9 @@ ratio <- 0.9
 # initialize tuning parameters
 ntree <- c(400, 600, 800, 1000)
 nodesize <- c(4, 8, 16, 32)
-eta <- c(0.3, 0.7); max.depth <- c(1, 2)
-subsample <- c(0.75, 0.9); nrounds <- c(100, 400)
-parameters <- list(ntree = ntree, nodesize = nodesize, eta = eta, 
-                   max.depth = max.depth, subsample = subsample, 
-                   nrounds = nrounds)
+gamma <- c(0, 0.1, 1, 10); cost <- c(0.1, 1, 10, 100)
+parameters <- list(ntree = ntree, nodesize = nodesize, gamma = gamma,
+                   cost = cost)
 
 # implement train-test splits with inner k-fold CV to optimize classification
 outputR4 <- cpfa(x = Xrag, y = y, model = model, nfac = nfac, nstart = nstart,
@@ -677,9 +670,8 @@ outputR4$descriptive$mean[, 1:2]
 outputR4$mean.opt.tune
 ```
 
-Accuracy values are between 0.55 and 0.56. The three-component Parafac2 model 
-with the RF classifier performed best (i.e., we choose RF because it has fewer
-tuning parameters than GBM, in this case). In addition, average optimal tuning 
+Accuracy values are between 0.50 and 0.61. The four-component Parafac2 model 
+with the RF classifier performed best. In addition, average optimal tuning 
 parameters are available for each classifier. 
 
 Next, we use `plotcpfa`. Looking at plots, we can search for relationships 
@@ -695,7 +687,7 @@ set.seed(500)
 results4 <- plotcpfa(outputR4, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
-We omit interpretations of the three components, given the difficulty 
+We omit interpretations of the four components, given the difficulty 
 of visualizing each organ object. However, we do consider box plots of the mode
 D weights.
 
@@ -715,23 +707,21 @@ for (i in 1:3) {
 }
 ```
 
-Examining medians, the first component appears to distinguish the spleen from 
-other organs; the second component, the femur and spleen from the pancreas and 
-bladder; and the third component, the pancreas and spleen from the other organs. 
+Examining medians reveals differentiation among classes across the components.
 More work would need to be done to investigate estimated B weights and C weights 
 to further interpret these components.
 
 # References
 
-Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-2, <https://CRAN.R-project.org/package=cpfa>.
+Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
+R package version 1.2-6. Upcoming update to version 1.2-5.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 
 Image Analysis, 84, 102680.
 
 Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to HDF5. 
-R package version 2.52.1, <https://bioconductor.org/packages/rhdf5>.
+R package version 2.54.1, <https://bioconductor.org/packages/rhdf5>.
 
 Harshman, R. (1970). Foundations of the PARAFAC procedure: Models and conditions 
 for an “explanatory” multi-modal factor analysis. UCLA working papers in 
@@ -754,10 +744,10 @@ Helwig, N. (2025). multiway: Component Models for Multi-Way Data.
 R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
-R package version 0.9.0, <https://CRAN.R-project.org/package=dslabs>.
+R package version 0.9.1, <https://CRAN.R-project.org/package=dslabs>.
 
 Kalinowski, T., Allaire, J., and Chollet, F. (2025). keras3: R Interface to 
-'Keras'. R package version 1.4.0, <https://CRAN.R-project.org/package=keras3>.
+'Keras'. R package version 1.5.0, <https://CRAN.R-project.org/package=keras3>.
 
 LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (2002). Gradient-based 
 learning applied to document recognition. Proceedings of the IEEE, 86(11), 

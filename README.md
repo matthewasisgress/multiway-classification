@@ -7,7 +7,7 @@ Package URL: <https://CRAN.R-project.org/package=cpfa>.
 
 ## Overview
 
-We apply R package **cpfa** (Asisgress, 2025) to four real datasets. First, we 
+We apply R package **cpfa** (Asisgress, 2026) to four real datasets. First, we 
 apply the package to MNIST (LeCun, Cortes, and Burges, 1998; LeCun et al., 
 2002)---showing how the package can be used to distinguish between images of the
 digits 2 and 3. Second, we apply the package to Fashion MNIST (Xiao, Rasul, and 
@@ -35,7 +35,7 @@ Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 
 This project uses the R programming language (R Core Team, 2025). In addition, 
 this project directly uses five R packages found on The Comprehensive R Archive 
-Network (CRAN) including: **cpfa** (Asisgress, 2025), **dslabs** (Irizarry and 
+Network (CRAN) including: **cpfa** (Asisgress, 2026), **dslabs** (Irizarry and 
 Gill, 2025), **keras3** (Kalinowski, Allaire, and Chollet, 2025), **rhdf5** 
 (Fischer, Smith, and Pau, 2025), and **plotly** (Sievert, 2020). Note that R 
 package **cpfa** depends on R package **multiway** (Helwig, 2025), which itself 
@@ -71,15 +71,15 @@ can be viewed within output files `mcrd.pdf` or `mcrd.html`.
 
 ## References
 
-Asisgress, M. (2025). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-3, <https://CRAN.R-project.org/package=cpfa>.
+Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
+R package version 1.2-6. Upcoming update to version 1.2-5.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 
 Image Analysis, 84, 102680.
 
 Fischer, B., Smith, M., and Pau, G. (2025). rhdf5: R Interface to HDF5. 
-R package version 2.52.1, <https://bioconductor.org/packages/rhdf5>.
+R package version 2.54.1, <https://bioconductor.org/packages/rhdf5>.
 
 Helwig, N. (2025). CMLS: Constrained Multivariate Least Squares.
 R package version 1.1, <https://CRAN.R-project.org/package=CMLS>.
@@ -88,10 +88,10 @@ Helwig, N. (2025). multiway: Component Models for Multi-Way Data.
 R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
-R package version 0.9.0, <https://CRAN.R-project.org/package=dslabs>.
+R package version 0.9.1, <https://CRAN.R-project.org/package=dslabs>.
 
 Kalinowski, T., Allaire, J., and Chollet, F. (2025). keras3: R Interface to 
-'Keras'. R package version 1.4.0, <https://CRAN.R-project.org/package=keras3>.
+'Keras'. R package version 1.5.0, <https://CRAN.R-project.org/package=keras3>.
 
 LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (2002). Gradient-based 
 learning applied to document recognition. Proceedings of the IEEE, 86(11), 

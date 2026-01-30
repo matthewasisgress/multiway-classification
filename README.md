@@ -63,9 +63,9 @@ made available under the terms of the CC BY 4.0 license.
 
 MNIST and Fashion MNIST are downloaded when `mcrd.Rmd` runs. VesselMNIST3D and 
 OrganMNIST3D are provided in the project GitHub repository in both their 
-original .npz file formats and .h5 file formats. The Python script 
-'convert_npz_to_h5.py' was used to convert VesselMNIST3D and OrganMNIST3D from 
-.npz to .h5. This script is made available in the project repository. When 
+original .npz file format and new .h5 file format. Specifically, the Python 
+script 'convert_npz_to_h5.py' was used to convert VesselMNIST3D and OrganMNIST3D 
+from .npz to .h5. This script is made available in the project repository. When 
 `mcrd.Rmd` runs, it subsets a given dataset, builds a classification rule 
 between data and class labels, and provides summaries of these analyses. Results 
 can be viewed within output files `mcrd.pdf` or `mcrd.html`.

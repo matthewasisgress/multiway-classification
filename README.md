@@ -34,12 +34,13 @@ Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 ## R packages
 
 This project uses the R programming language (R Core Team, 2025). In addition, 
-this project directly uses five R packages found on The Comprehensive R Archive 
-Network (CRAN) including: **cpfa** (Asisgress, 2026), **dslabs** (Irizarry and 
-Gill, 2025), **keras3** (Kalinowski, Allaire, and Chollet, 2025), **rhdf5** 
-(Fischer, Smith, and Pau, 2025), and **plotly** (Sievert, 2020). Note that R 
-package **cpfa** depends on R package **multiway** (Helwig, 2025), which itself 
-depends on **CMLS** (Helwig, 2025).
+this project directly uses four R packages found on The Comprehensive R Archive 
+Network (CRAN) and one R package found on Bioconductor. Package include: 
+**cpfa** (Asisgress, 2026), **dslabs** (Irizarry and Gill, 2025), **keras3** 
+(Kalinowski, Allaire, and Chollet, 2025), **rhdf5** (Fischer, Smith, and Pau, 
+2025), and **plotly** (Sievert, 2020). Note that R package **cpfa** depends on 
+R package **multiway** (Helwig, 2025), which itself depends on **CMLS** (Helwig, 
+2025).
 
 ## Data
 

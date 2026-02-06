@@ -73,7 +73,7 @@ can be viewed within output files `mcrd.pdf` or `mcrd.html`.
 ## References
 
 Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-6. Upcoming update to version 1.2-5.
+R package version 1.2-6. <https://CRAN.R-project.org/package=cpfa>.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 

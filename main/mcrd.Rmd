@@ -1,8 +1,11 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2026-01-24"
-output: pdf_document
+date: "2026-02-06"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -322,7 +325,7 @@ outputR2$descriptive$mean[, 1:2]
 outputR2$mean.opt.tune
 ```
 
-Accuracy values are between 0.9 and 0.922. The three-component Parafac2 model 
+Accuracy values are between 0.92 and 0.938. The three-component Parafac2 model 
 with the SVM classifier performed best. In addition, average optimal tuning 
 parameters are available for each model. 
 
@@ -438,6 +441,9 @@ set `nrep <- 5` to perform five outer train-test splits. Fifth, we set
 `ratio <- 0.9`. Finally, we specify ranges for tuning parameters alpha (RDA), 
 delta (RDA), size (NN), and decay (NN), wrapping them into `parameters`.
 
+Finally, for this analysis, we set `parallel = TRUE` to use parallel computing,
+reducing total computation time.
+
 ```{r, message = FALSE, warning = FALSE}
 # load library
 library(cpfa)
@@ -469,7 +475,7 @@ outputR3 <- cpfa(x = Xp, y = y, model = model, nfac = nfac, nstart = nstart,
                 const = const, method = method, family = family, 
                 nfolds = nfolds, nrep = nrep, ratio = ratio, 
                 parameters = parameters, type.out = "descriptives", 
-                seeds = NULL, plot.out = TRUE, parallel = FALSE, 
+                seeds = NULL, plot.out = TRUE, parallel = TRUE, 
                 verbose = FALSE)
 ```
 
@@ -616,12 +622,17 @@ the number of components to fit by setting `nfac <- c(3, 4)`. Third, we set
 For Parafac2, we set the fourth mode to have non-negative weights.
 
 Next, we initialize classification methods. First, we use 
-`method = c("RF", "SVM")` to use RF and SVM. Second, we specify that the problem 
-is multiclass, setting `family <- "multinomial"`. Third, we use 10-fold CV in 
-our inner training, setting `nfolds <- 10`; and fourth, we set `nrep <- 5` to 
-perform five outer train-test splits. Fifth, we set `ratio <- 0.9`. Finally, we 
-specify ranges for tuning parameters the number of trees (RF), node size (RF), 
-gamma (SVM), and cost (SVM), wrapping them into the list called `parameters`.
+`method = c("RF", "SVM", "GBM")` to use RF, SVM, and GBM. Second, we specify 
+that the problem is multiclass, setting `family <- "multinomial"`. Third, we use 
+10-fold CV in our inner training, setting `nfolds <- 10`; and fourth, we set 
+`nrep <- 5` to perform five outer train-test splits. Fifth, we set 
+`ratio <- 0.9`. Finally, we specify ranges for tuning parameters the number 
+of trees (RF), node size (RF), gamma (SVM), cost (SVM), eta (GBM), maximum depth
+(GBM), subsample (GBM), and the number of rounds (GBM), wrapping them into the 
+list called `parameters`.
+
+Finally, for this analysis, we set `parallel = TRUE` to use parallel computing,
+reducing total computation time.
 
 ```{r, message = FALSE, warning = FALSE}
 # set seed
@@ -634,7 +645,7 @@ nstart <- 10
 const <- c("uncons", "uncons", "uncons", "nonneg")
 
 # initialize classification
-method <- c("RF", "SVM")
+method <- c("RF", "SVM", "GBM")
 family <- "multinomial"
 nfolds <- 10
 nrep <- 5
@@ -644,15 +655,20 @@ ratio <- 0.9
 ntree <- c(400, 600, 800, 1000)
 nodesize <- c(4, 8, 16, 32)
 gamma <- c(0, 0.1, 1, 10); cost <- c(0.1, 1, 10, 100)
+eta <- c(0.3, 0.7, 0.9)
+max.depth <- c(1, 2, 4, 8)
+subsample <- c(0.6, 0.75, 0.9)
+nrounds <- c(100, 500, 1000)
 parameters <- list(ntree = ntree, nodesize = nodesize, gamma = gamma,
-                   cost = cost)
+                   cost = cost, eta = eta, max.depth = max.depth,
+                   subsample = subsample, nrounds = nrounds)
 
 # implement train-test splits with inner k-fold CV to optimize classification
 outputR4 <- cpfa(x = Xrag, y = y, model = model, nfac = nfac, nstart = nstart,
                  const = const, method = method, family = family, 
                  nfolds = nfolds, nrep = nrep, ratio = ratio, 
                  parameters = parameters, type.out = "descriptives", 
-                 seeds = NULL, plot.out = TRUE, parallel = FALSE, 
+                 seeds = NULL, plot.out = TRUE, parallel = TRUE, 
                  verbose = FALSE)
 ```
 
@@ -670,7 +686,7 @@ outputR4$descriptive$mean[, 1:2]
 outputR4$mean.opt.tune
 ```
 
-Accuracy values are between 0.50 and 0.61. The four-component Parafac2 model 
+Accuracy values are between 0.53 and 0.65. The four-component Parafac2 model 
 with the RF classifier performed best. In addition, average optimal tuning 
 parameters are available for each classifier. 
 
@@ -700,21 +716,21 @@ groups <- factor(rep(1:length(levels(y)), each = 115),
                  labels = c("Bladder", "Femur", "Pancreas", "Spleen"))
 
 # generate box plots
-for (i in 1:3) {
+for (i in 1:4) {
    boxplot(mat[, i] ~ groups, 
           main = paste("D weights for Component", i), xlab = "Organ",
           ylab = "D Weights", col = "lightblue", border = "darkblue")
 }
 ```
 
-Examining medians reveals differentiation among classes across the components.
-More work would need to be done to investigate estimated B weights and C weights 
-to further interpret these components.
+Examining medians shows differentiation among classes across the components.
+Additional work would need to be done to investigate estimated B weights and C 
+weights to interpret components further.
 
 # References
 
 Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-6. Upcoming update to version 1.2-5.
+R package version 1.2-6. <https://CRAN.R-project.org/package=cpfa>.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 

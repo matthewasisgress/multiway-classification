@@ -348,21 +348,21 @@ stronger between levels 11 to 14 and between 16 and 19. This first component
 might be capturing non-zero changes displayed at the center of the top images. 
 The first component might help distinguish tops from trousers and sandals.
 
-For the second component, weights are stronger between levels 6 to 23. This 
-component could be a general component distinguishing non-zero values in the 
-middle columns of images from zero values at the far left and far right columns. 
-While the sandal has some non-zero values in the far left and far right columns, 
-the top and trouser generally do not; so this second component might help 
-distinguish the top and the trouser from the sandal.
-
-For the third component, weights are stronger between levels 6 and 9 and between 
-22 and 25. This third component might be capturing zero values to the left and 
-right of images, contrasting them with non-zero values in the middle. 
+For the second component, weights are stronger between levels 6 and 9 and 
+between 22 and 25. This third component might be capturing zero values to the 
+left and right of images, contrasting them with non-zero values in the middle. 
 Interestingly, we see two negative bands between levels 11 and 14 and between 16 
 and 19; however, level 15 is positive. Level 15 might correspond to the empty 
 space between the trouser legs while the negative bands might represent non-zero 
 values in the legs. If so, this component might help distinguish trousers from 
 tops or sandals.
+
+For the third component, weights are stronger between levels 6 to 23. This 
+component could be a general component distinguishing non-zero values in the 
+middle columns of images from zero values at the far left and far right columns. 
+While the sandal has some non-zero values in the far left and far right columns, 
+the top and trouser generally do not; so this second component might help 
+distinguish the top and the trouser from the sandal.
 
 These interpretations are limited. For all components, more work would need to 
 be done to explore the estimated A mode weights (or C mode weights) to 
@@ -493,7 +493,7 @@ outputR3$descriptive$mean[, 1:2]
 outputR3$mean.opt.tune
 ```
 
-Accuracy values are between 0.65 and 0.71. The three-component Parafac model 
+Accuracy values are between 0.64 and 0.70. The three-component Parafac model 
 with the RDA classifier performed best. In addition, average optimal tuning 
 parameters are available for each classifier. 
 
@@ -687,8 +687,8 @@ outputR4$descriptive$mean[, 1:2]
 outputR4$mean.opt.tune
 ```
 
-Accuracy values are between 0.54 and 0.66. The four-component Parafac2 model 
-with the RF classifier performed best. In addition, average optimal tuning 
+Accuracy values are between 0.54 and 0.65. The four-component Parafac2 model 
+with the SVM classifier performed best. In addition, average optimal tuning 
 parameters are available for each classifier. 
 
 Next, we use `plotcpfa`. Looking at plots, we can search for relationships 
@@ -705,28 +705,8 @@ results4 <- plotcpfa(outputR4, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
 We omit interpretations of the four components, given the difficulty of 
-visualizing each organ object. However, we do consider box plots of the mode
-D weights.
-
-```{r}
-# define estimated D weights
-mat <- results4$Dweights
-
-# set up box plots
-groups <- factor(rep(1:length(levels(y)), each = 115), 
-                 labels = c("Bladder", "Femur", "Pancreas", "Spleen"))
-
-# generate box plots
-for (i in 1:4) {
-   boxplot(mat[, i] ~ groups, 
-          main = paste("D weights for Component", i), xlab = "Organ",
-          ylab = "D Weights", col = "lightblue", border = "darkblue")
-}
-```
-
-Examining medians shows differentiation among classes across the components.
-Additional work would need to be done to investigate estimated B weights and C 
-weights to interpret components further.
+visualizing each organ object. Additional work would need to be performed to 
+investigate estimated B weights and C weights to interpret components further.
 
 # References
 

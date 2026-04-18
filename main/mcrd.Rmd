@@ -1,11 +1,11 @@
 ---
 title: "Multiway Classification with Real Data"
 author: "Matthew Asisgress"
-date: "2026-02-06"
+date: "2026-04-18"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -30,8 +30,8 @@ four organs.
 
 MNIST consists of 70,000 grayscale images of handwritten digits from 0 to 9. We 
 use R package **dslabs** (Irizarry and Gill, 2025) to download the dataset. We 
-subset to only 2000 images from the original training set. The images include 
-980 images of the digit 2 and 1020 images of the digit 3.
+subset to 2000 images from the original training set. The images include 980 
+images of the digit 2 and 1020 images of the digit 3.
 
 ## Download
 
@@ -55,7 +55,7 @@ X <- X0[ind, , ]
 y <- y0[ind]
 ```
 
-We plot an example of digit 2 and digit 3.
+We plot an example of the digit 2 and of the digit 3.
 
 ```{r}
 # plot example of 2 and 3
@@ -73,7 +73,7 @@ par(mfrow = c(1, 1))
 
 ## Analysis
 
-We load R package **cpfa** and initialize the tensor model. First, the data 
+We load R package **cpfa** and initialize the multiway model. First, the data 
 array is a regular three-way array; so we set `model <- "parafac"` to use a 
 Parafac model (Harshman, 1970). Second, we initialize the number of components 
 to fit for the model by setting `nfac <- c(2, 3)` in order to fit both a 
@@ -191,7 +191,7 @@ digit 2, which differs from the open or half circle seen in digit 3.
 Fashion MNIST consists of 70,000 grayscale images of fashion objects within 10 
 different categories, indexed by class labels of 0 through 9 (Xiao, Rasul, and 
 Vollgraf, 2017). We use R package **keras3** (Kalinowski, Allaire, and Chollet, 
-2025) to download the dataset. We subset to 1000 images from the training set. 
+2026) to download the dataset. We subset to 1000 images from the training set. 
 We only use images within the categories of top (with a label of 0), trouser 
 (1), or sandal (5). Images include 308 tops, 357 trousers, and 335 sandals. 
 
@@ -521,7 +521,8 @@ scans of abdominal organs from the Liver Tumor Segmentation Benchmark (LiTS;
 Bilic et al., 2023). Yang et al. (2023) used bounding-box annotations of 11 body 
 organs from another study (Xuanang  et al., 2019) to obtain organ labels. We 
 use four categories: bladder (indexed by 0), left femur (1), pancreas (9), and 
-spleen (10). As with VesselMNIST3D, we download OrganMNIST3D manually from <https://medmnist.com/>, which gives us a .npz file. After changing the name
+spleen (10). As with VesselMNIST3D, we download OrganMNIST3D manually from 
+<https://medmnist.com/>, which gives us a .npz file. After changing the name
 from `vesselmnist3d` to `organmnist3d` at lines four and five, we use the 
 Python script `convert_npz_to_h5.py` to convert OrganMNIST3D from a file format 
 of .npz to .h5. Next, we use R package **rhdf5** (Fischer, Smith, and Pau, 2025) 
@@ -686,7 +687,7 @@ outputR4$descriptive$mean[, 1:2]
 outputR4$mean.opt.tune
 ```
 
-Accuracy values are between 0.53 and 0.65. The four-component Parafac2 model 
+Accuracy values are between 0.54 and 0.66. The four-component Parafac2 model 
 with the RF classifier performed best. In addition, average optimal tuning 
 parameters are available for each classifier. 
 
@@ -703,13 +704,13 @@ set.seed(500)
 results4 <- plotcpfa(outputR4, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
-We omit interpretations of the four components, given the difficulty 
-of visualizing each organ object. However, we do consider box plots of the mode
+We omit interpretations of the four components, given the difficulty of 
+visualizing each organ object. However, we do consider box plots of the mode
 D weights.
 
 ```{r}
 # define estimated D weights
-mat <- results4$`D Weights`
+mat <- results4$Dweights
 
 # set up box plots
 groups <- factor(rep(1:length(levels(y)), each = 115), 
@@ -730,7 +731,7 @@ weights to interpret components further.
 # References
 
 Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-6. <https://CRAN.R-project.org/package=cpfa>.
+R package version 1.2-8. <https://CRAN.R-project.org/package=cpfa>.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 
@@ -762,8 +763,8 @@ R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
 R package version 0.9.1, <https://CRAN.R-project.org/package=dslabs>.
 
-Kalinowski, T., Allaire, J., and Chollet, F. (2025). keras3: R Interface to 
-'Keras'. R package version 1.5.0, <https://CRAN.R-project.org/package=keras3>.
+Kalinowski, T., Allaire, J., and Chollet, F. (2026). keras3: R Interface to 
+'Keras'. R package version 1.5.1, <https://CRAN.R-project.org/package=keras3>.
 
 LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (2002). Gradient-based 
 learning applied to document recognition. Proceedings of the IEEE, 86(11), 
@@ -772,7 +773,7 @@ learning applied to document recognition. Proceedings of the IEEE, 86(11),
 LeCun, Y., Cortes, C., and Burges, C. (1998). The MNIST database of handwritten 
 digits. <http://yann.lecun.com/exdb/mnist/>.
 
-R Core Team (2025). R: A Language and Environment for Statistical Computing. R 
+R Core Team (2026). R: A Language and Environment for Statistical Computing. R 
 Foundation for Statistical Computing, Vienna, Austria. 
 <https://www.R-project.org/>.
 

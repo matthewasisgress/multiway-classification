@@ -33,11 +33,11 @@ Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 
 ## R packages
 
-This project uses the R programming language (R Core Team, 2025). In addition, 
+This project uses the R programming language (R Core Team, 2026). In addition, 
 this project directly uses four R packages found on The Comprehensive R Archive 
 Network (CRAN) and one R package found on Bioconductor. Packages include: 
 **cpfa** (Asisgress, 2026), **dslabs** (Irizarry and Gill, 2025), **keras3** 
-(Kalinowski, Allaire, and Chollet, 2025), **rhdf5** (Fischer, Smith, and Pau, 
+(Kalinowski, Allaire, and Chollet, 2026), **rhdf5** (Fischer, Smith, and Pau, 
 2025), and **plotly** (Sievert, 2020). Note that R package **cpfa** depends on 
 R package **multiway** (Helwig, 2025), which itself depends on **CMLS** (Helwig, 
 2025).
@@ -73,7 +73,7 @@ can be viewed within output files `mcrd.pdf` or `mcrd.html`.
 ## References
 
 Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.2-6. <https://CRAN.R-project.org/package=cpfa>.
+R package version 1.2-8. <https://CRAN.R-project.org/package=cpfa>.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 
@@ -91,8 +91,8 @@ R package version 1.0-7, <https://CRAN.R-project.org/package=multiway>.
 Irizarry, R., Gill, A. (2025). dslabs: Data Science Labs.
 R package version 0.9.1, <https://CRAN.R-project.org/package=dslabs>.
 
-Kalinowski, T., Allaire, J., and Chollet, F. (2025). keras3: R Interface to 
-'Keras'. R package version 1.5.0, <https://CRAN.R-project.org/package=keras3>.
+Kalinowski, T., Allaire, J., and Chollet, F. (2026). keras3: R Interface to 
+'Keras'. R package version 1.5.1, <https://CRAN.R-project.org/package=keras3>.
 
 LeCun, Y., Bottou, L., Bengio, Y., and Haffner, P. (2002). Gradient-based 
 learning applied to document recognition. Proceedings of the IEEE, 86(11), 
@@ -101,7 +101,7 @@ learning applied to document recognition. Proceedings of the IEEE, 86(11),
 LeCun, Y., Cortes, C., and Burges, C. (1998). The MNIST database of handwritten 
 digits. <http://yann.lecun.com/exdb/mnist/>.
 
-R Core Team (2025). R: A Language and Environment for Statistical Computing. R 
+R Core Team (2026). R: A Language and Environment for Statistical Computing. R 
 Foundation for Statistical Computing, Vienna, Austria. 
 <https://www.R-project.org/>.
 

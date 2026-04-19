@@ -20,15 +20,14 @@ to OrganMNIST3D (Bilic et al., 2023; Xu et al., 2019) from the MedMNIST database
 (Yang et al., 2023; Yang, Shi, Ni, 2021). OrganMNIST3D contains 
 three-dimensional representations of abdominal organs, and we distinguish among 
 four organs. For this project, the source file `mcrd.Rmd` contains original text 
-and code used to produce the two reports `mcrd.pdf` and `mcrd.html`, which both 
-contain results.
+and code used to produce the report `mcrd.pdf`, which contains results.
 
 ## License
 
 This project is dual-licensed. All code and text, including the `mcrd.Rmd` 
 source file and the `convert_npz_to_h5.py` file, is licensed under the MIT 
-license. See the `LICENSE` file for details. Generated reports (`mcrd.pdf` and 
-`mcrd.html`), as derivative works of the MNIST dataset, are licensed under the 
+license. See the `LICENSE` file for details. Generated report (`mcrd.pdf`), as 
+a derivative work of the MNIST dataset, is licensed under the 
 Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
 
 ## R packages
@@ -68,7 +67,7 @@ script 'convert_npz_to_h5.py' was used to convert VesselMNIST3D and OrganMNIST3D
 from .npz to .h5. This script is made available in the project repository. When 
 `mcrd.Rmd` runs, it subsets a given dataset, builds a classification rule 
 between data and class labels, and provides summaries of these analyses. Results 
-can be viewed within output files `mcrd.pdf` or `mcrd.html`.
+can be viewed within output file `mcrd.pdf`.
 
 ## References
 

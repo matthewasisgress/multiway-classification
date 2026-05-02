@@ -1,7 +1,8 @@
 ---
-title: "Multiway Classification with Real Data"
+title: "Multiway Classification with Real Data: Application of R Package 
+       **cpfa** to Four Public Datasets"
 author: "Matthew Asisgress"
-date: "2026-04-18"
+date: "2026-05-01"
 output:
   pdf_document: default
   html_document:
@@ -364,10 +365,17 @@ While the sandal has some non-zero values in the far left and far right columns,
 the top and trouser generally do not; so this third component might help 
 distinguish the top and the trouser from the sandal.
 
+Overall, the first two components correspond closely to one another, indicating
+that the three-component solution might represent an overfactoring of the data.
+The two-component solution might offer a better tradeoff between parsimony and 
+classification performance, especially given how close the two solutions match
+one another in accuracy. Beyond that, the one-component solution might be worth
+considering as well.
+
 These interpretations are limited. For all components, more work would need to 
 be done to explore the estimated A mode weights (or C mode weights) to 
 understand the components from other perspectives. Such work could clarify the 
-components further and change the current interpretations.
+components further.
 
 # C.) VesselMNIST3D from MedMNIST
 
@@ -507,9 +515,14 @@ results3 <- plotcpfa(outputR3, nstart = 10, ctol = 1e-6, verbose = FALSE)
 ```
 
 We omit interpretations of the three components, given the difficulty 
-of visualizing each blood vessel object. For more information about this dataset
-and classification work using it, consider exploring Yang, Xia, Kin, and 
-Igarashi (2020); Yang et al. (2023); and Yang, Shi, and Ni (2021).
+of visualizing each blood vessel object. However, the weights across all three
+modes clearly show that the three-component solution is likely an overfactoring
+and that it would be prudent to examine the weights for the two-component or 
+even one-component solution. Likely, one or two components would be enough for
+these data. This case demonstrates how the package can be a useful exploratory
+tool for examining tradeoffs between optimal classification performance, 
+parsimony, and interpretation. For more information about this dataset, consider exploring Yang, Xia, Kin, and Igarashi (2020); Yang et al. (2023); and Yang, 
+Shi, and Ni (2021).
 
 # D.) OrganMNIST3D from MedMNIST
 

@@ -521,7 +521,8 @@ and that it would be prudent to examine the weights for the two-component or
 even one-component solution. Likely, one or two components would be enough for
 these data. This case demonstrates how the package can be a useful exploratory
 tool for examining tradeoffs between optimal classification performance, 
-parsimony, and interpretation. For more information about this dataset, consider exploring Yang, Xia, Kin, and Igarashi (2020); Yang et al. (2023); and Yang, 
+parsimony, and interpretation. For more information about this dataset, consider 
+exploring Yang, Xia, Kin, and Igarashi (2020); Yang et al. (2023); and Yang, 
 Shi, and Ni (2021).
 
 # D.) OrganMNIST3D from MedMNIST

@@ -1,4 +1,4 @@
-# Multiway classification with R package **cpfa**: An application to four real datasets
+# Multiway classification with R package **cpfa**: An application to four public datasets
 
 Author: Matthew Asisgress
 

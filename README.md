@@ -72,7 +72,7 @@ summaries of these analyses. Results can be viewed within output file
 ## References
 
 Asisgress, M. (2026). cpfa: Classification with Parallel Factor Analysis. 
-R package version 1.3.0. <https://CRAN.R-project.org/package=cpfa>.
+R package version 1.3.1. <https://CRAN.R-project.org/package=cpfa>.
 
 Bilic, P., Christ, P., Li, H., Vorontsov, E., Ben-Cohen, A., Kaissis, G., ...
 and Menze, B. (2023). The liver tumor segmentation benchmark (lits). Medical 
